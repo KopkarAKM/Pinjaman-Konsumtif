@@ -19,17 +19,39 @@
         ::-webkit-scrollbar { width: 0px; background: transparent; }
         .hidden { display: none !important; }
         
-        /* CSS Khusus untuk Cetak Dokumen */
+        /* CSS Khusus untuk Cetak Dokumen yang Diperbaiki */
         @media print {
-            body * { visibility: hidden; }
-            #print-area, #print-area * { visibility: visible; }
-            #print-area { position: absolute; left: 0; top: 0; width: 100%; }
-            .print-page { page-break-after: always; padding: 20px 40px; font-family: 'Times New Roman', Times, serif; font-size: 11pt; line-height: 1.5; color: black; }
-            .print-page:last-child { page-break-after: avoid; }
+            @page {
+                margin: 15mm;
+                size: A4 portrait;
+            }
+            body { 
+                background-color: white !important; 
+                -webkit-print-color-adjust: exact; 
+            }
+            /* Menyembunyikan elemen web saat mencetak */
+            header, nav, button, #overlay, #view-dashboard, #view-step1, #view-step2, #view-step3 { 
+                display: none !important; 
+            }
+            /* Menampilkan area cetak secara natural agar tidak terpotong */
+            #print-area { 
+                display: block !important; 
+                width: 100%; 
+                position: static !important;
+            }
+            .print-page { 
+                page-break-after: always; 
+                page-break-inside: avoid;
+                font-family: 'Times New Roman', Times, serif; 
+                font-size: 11pt; 
+                line-height: 1.5; 
+                color: black; 
+            }
+            .print-page:last-child { page-break-after: auto; }
             .print-page h1 { font-size: 12pt; font-weight: bold; text-align: center; margin-bottom: 20px; text-transform: uppercase; }
-            .print-row { display: flex; margin-bottom: 6px; }
-            .print-label { width: 220px; }
-            .print-colon { width: 20px; }
+            .print-row { display: flex; margin-bottom: 6px; page-break-inside: avoid; }
+            .print-label { width: 220px; flex-shrink: 0; }
+            .print-colon { width: 20px; flex-shrink: 0; text-align: center; }
             .print-value { flex: 1; border-bottom: 1px dotted #000; min-height: 20px; }
             .text-center { text-align: center; }
             .mt-10 { margin-top: 40px; }
@@ -43,6 +65,7 @@
 </head>
 <body class="bg-surface text-on-surface font-body-md min-h-screen flex flex-col pb-24">
 
+    <!-- Notifikasi Loading/Sukses -->
     <div id="overlay" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center">
         <div class="bg-white p-6 rounded-xl shadow-lg text-center max-w-sm w-full mx-4">
             <span id="loading-spinner" class="material-symbols-outlined animate-spin text-4xl text-primary mb-2">refresh</span>
@@ -194,6 +217,7 @@
                         <option value="12">12 Bulan</option>
                         <option value="24">24 Bulan</option>
                         <option value="36">36 Bulan</option>
+                        <option value="48">48 Bulan</option>
                     </select>
                 </div>
                 <div>
@@ -480,12 +504,10 @@
                     if(res.status === 'success') {
                         const d = res.data;
                         
-                        // Tampilkan hasil di dasbor
                         document.getElementById('dashNama').innerText = d.namaLengkap || 'Anggota';
                         document.getElementById('dashLimit').innerText = "Rp " + parseInt(d.sisaLimit || 0).toLocaleString('id-ID');
                         resultDiv.classList.remove('hidden');
 
-                        // Isi form step 1 secara diam-diam agar siap digunakan
                         document.getElementById('nomorAnggota').value = noAnggota;
                         document.getElementById('namaLengkap').value = d.namaLengkap || '';
                         document.getElementById('nomorKtp').value = d.nomorKtp || '';
@@ -517,18 +539,11 @@
         }
 
         document.getElementById('nomorAnggota').addEventListener('blur', function() { 
-            // Fungsi ini bisa tetap ada jika anggota ingin mengubah nomor manual di form
-            cariData(this.value); 
-        });
-
-        function cariData(nomorAnggota) {
-            if(!nomorAnggota) return;
-            
-            let url = GOOGLE_SCRIPT_URL + "?noAnggota=" + encodeURIComponent(nomorAnggota);
-            document.getElementById('namaLengkap').placeholder = "Sedang mencari data...";
-            
+            let val = this.value;
+            if(!val) return;
+            let url = GOOGLE_SCRIPT_URL + "?noAnggota=" + encodeURIComponent(val);
             fetch(url, { method: 'GET', mode: 'cors' })
-                .then(r => { if (!r.ok) throw new Error("Jaringan error"); return r.json(); })
+                .then(r => r.json())
                 .then(res => {
                     if(res.status === 'success') {
                         const d = res.data;
@@ -540,21 +555,13 @@
                         document.getElementById('alamat').value = d.alamat || '';
                         document.getElementById('namaBank').value = d.namaBank || '';
                         document.getElementById('noRekening').value = d.noRekening || '';
-                        
                         if (d.ttl) {
                             let parts = d.ttl.split(',');
                             document.getElementById('tempatLahir').value = parts[0] ? parts[0].trim() : d.ttl;
                         }
-                        document.getElementById('namaLengkap').placeholder = "";
-                    } else {
-                        document.getElementById('namaLengkap').placeholder = "Data tidak ditemukan, isi manual";
                     }
-                })
-                .catch(err => {
-                    console.warn("Pencarian diabaikan.");
-                    document.getElementById('namaLengkap').placeholder = "Gagal terhubung, isi manual";
                 });
-        }
+        });
 
         function toggleJaminanFields() {
             const jaminan = document.getElementById('jenisJaminan').value;
@@ -586,40 +593,50 @@
             success.classList.add('hidden');
 
             const payload = {
-                namaLengkap: document.getElementById('namaLengkap').value,
-                nomorKtp: document.getElementById('nomorKtp').value,
-                npwp: document.getElementById('npwp').value,
+                namaLengkap: document.getElementById('namaLengkap').value || '-',
+                nomorKtp: document.getElementById('nomorKtp').value || '-',
+                npwp: document.getElementById('npwp').value || '-',
                 ttl: document.getElementById('tempatLahir').value + ", " + document.getElementById('tanggalLahir').value,
-                jenisKelamin: document.getElementById('jenisKelamin').value,
-                pekerjaan: document.getElementById('pekerjaan').value,
-                nomorAnggota: document.getElementById('nomorAnggota').value,
-                alamat: document.getElementById('alamat').value,
-                lokasiKerja: document.getElementById('lokasiKerja').value,
-                email: document.getElementById('email').value,
-                nomorTelp: document.getElementById('nomorTelp').value,
-                hpPasangan: document.getElementById('hpPasangan').value,
-                namaAtasan: document.getElementById('namaAtasan').value,
-                hpAtasan: document.getElementById('hpAtasan').value,
-                namaOrangTua: document.getElementById('namaOrangTua').value,
-                hpOrangTua: document.getElementById('hpOrangTua').value,
-                ibuKandung: document.getElementById('ibuKandung').value,
-                jumlahPinjaman: document.getElementById('jumlahPinjaman').value,
-                jangkaWaktu: document.getElementById('jangkaWaktu').value,
-                keperluan: document.getElementById('keperluan').value,
-                namaBank: document.getElementById('namaBank').value,
-                noRekening: document.getElementById('noRekening').value,
-                noKartuAtm: document.getElementById('noKartuAtm').value,
-                jenisJaminan: document.getElementById('jenisJaminan').value,
+                jenisKelamin: document.getElementById('jenisKelamin').value || '-',
+                pekerjaan: document.getElementById('pekerjaan').value || '-',
+                nomorAnggota: document.getElementById('nomorAnggota').value || '-',
+                alamat: document.getElementById('alamat').value || '-',
+                lokasiKerja: document.getElementById('lokasiKerja').value || '-',
+                email: document.getElementById('email').value || '-',
+                nomorTelp: document.getElementById('nomorTelp').value || '-',
+                hpPasangan: document.getElementById('hpPasangan').value || '-',
+                namaAtasan: document.getElementById('namaAtasan').value || '-',
+                hpAtasan: document.getElementById('hpAtasan').value || '-',
+                namaOrangTua: document.getElementById('namaOrangTua').value || '-',
+                hpOrangTua: document.getElementById('hpOrangTua').value || '-',
+                ibuKandung: document.getElementById('ibuKandung').value || '-',
+                jumlahPinjaman: document.getElementById('jumlahPinjaman').value || '0',
+                jangkaWaktu: document.getElementById('jangkaWaktu').value || '-',
+                keperluan: document.getElementById('keperluan').value || '-',
+                namaBank: document.getElementById('namaBank').value || '-',
+                noRekening: document.getElementById('noRekening').value || '-',
+                noKartuAtm: document.getElementById('noKartuAtm').value || '-',
+                jenisJaminan: document.getElementById('jenisJaminan').value || '-',
                 spekKendaraan: `Merk: ${document.getElementById('jMerk').value} | Nopol: ${document.getElementById('jNopol').value} | Thn: ${document.getElementById('jTahun').value} | Rangka: ${document.getElementById('jRangka').value} | Mesin: ${document.getElementById('jMesin').value} | Warna: ${document.getElementById('jWarna').value}`,
                 spekTanah: `SHM: ${document.getElementById('jShm').value} | Luas: ${document.getElementById('jLuas').value} m2 | Utara: ${document.getElementById('jUtara').value} | Selatan: ${document.getElementById('jSelatan').value} | Timur: ${document.getElementById('jTimur').value} | Barat: ${document.getElementById('jBarat').value}`
             };
 
-            // Menyalin Data ke Halaman 4 (Permohonan)
-            document.getElementById('p1-nama').innerText = payload.namaLengkap;
-            document.getElementById('p1-ktp').innerText = payload.nomorKtp;
+            // Mengisi data cetak secara konsisten ke seluruh halaman
+            const elements = {
+                nama: ['p1-nama', 'p2-nama', 'pb-nama', 'ps-nama', 'p8-nama', 'p8-namarek', 'p1-ttdnama', 'p2-ttdnama', 'pb-ttdnama', 'pkb-ttdnama', 'ps-ttdnama', 'pks-ttdnama', 'p8-ttdnama'],
+                ktp: ['p1-ktp', 'p2-ktp', 'pb-ktp', 'ps-ktp', 'p8-ktp'],
+                alamat: ['p1-alamat', 'p2-alamat', 'pb-alamat', 'p8-alamat'],
+                anggota: ['p1-anggota', 'p2-anggota'],
+                bank: ['p1-bank', 'p2-bank', 'p8-bank']
+            };
+
+            elements.nama.forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerText = payload.namaLengkap; });
+            elements.ktp.forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerText = payload.nomorKtp; });
+            elements.alamat.forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerText = payload.alamat; });
+            elements.anggota.forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerText = payload.nomorAnggota; });
+            elements.bank.forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerText = payload.namaBank; });
+
             document.getElementById('p1-npwp').innerText = payload.npwp;
-            document.getElementById('p1-alamat').innerText = payload.alamat;
-            document.getElementById('p1-anggota').innerText = payload.nomorAnggota;
             document.getElementById('p1-lokasi').innerText = payload.lokasiKerja;
             document.getElementById('p1-email').innerText = payload.email;
             document.getElementById('p1-hp').innerText = payload.nomorTelp;
@@ -627,68 +644,42 @@
             document.getElementById('p1-atasan').innerText = payload.namaAtasan + " / " + payload.hpAtasan;
             document.getElementById('p1-ortu').innerText = payload.namaOrangTua;
             document.getElementById('p1-hportu').innerText = payload.hpOrangTua;
-            document.getElementById('p1-bank').innerText = payload.namaBank;
-            document.getElementById('p1-jumlah').innerText = parseInt(payload.jumlahPinjaman || 0).toLocaleString('id-ID');
+            
+            let formatJumlah = parseInt(payload.jumlahPinjaman).toLocaleString('id-ID');
+            document.getElementById('p1-jumlah').innerText = formatJumlah;
+            document.getElementById('p2-jumlah').innerText = formatJumlah;
             document.getElementById('p1-tenor').innerText = payload.jangkaWaktu;
+            document.getElementById('p2-tenor').innerText = payload.jangkaWaktu;
             document.getElementById('p1-keperluan').innerText = payload.keperluan;
             document.getElementById('p1-jaminan').innerText = payload.jenisJaminan;
-            document.getElementById('p1-ttdnama').innerText = payload.namaLengkap;
-            
-            // Menyalin Data ke Halaman 5 (Pengakuan Hutang)
-            document.getElementById('p2-nama').innerText = payload.namaLengkap;
-            document.getElementById('p2-ktp').innerText = payload.nomorKtp;
-            document.getElementById('p2-alamat').innerText = payload.alamat;
-            document.getElementById('p2-anggota').innerText = payload.nomorAnggota;
-            document.getElementById('p2-bank').innerText = payload.namaBank;
+
             document.getElementById('p2-norek').innerText = payload.noRekening;
-            document.getElementById('p2-jumlah').innerText = parseInt(payload.jumlahPinjaman || 0).toLocaleString('id-ID');
-            document.getElementById('p2-tenor').innerText = payload.jangkaWaktu;
-            document.getElementById('p2-ttdnama').innerText = payload.namaLengkap;
-
-            // Menyalin Data Jaminan secara menyeluruh tanpa menyembunyikan halaman
-            document.getElementById('pb-nama').innerText = payload.namaLengkap;
-            document.getElementById('pb-ktp').innerText = payload.nomorKtp;
-            document.getElementById('pb-alamat').innerText = payload.alamat;
-            document.getElementById('pb-merk').innerText = document.getElementById('jMerk').value;
-            document.getElementById('pb-nopol').innerText = document.getElementById('jNopol').value;
-            document.getElementById('pb-tahun').innerText = document.getElementById('jTahun').value;
-            document.getElementById('pb-rangka').innerText = document.getElementById('jRangka').value;
-            document.getElementById('pb-mesin').innerText = document.getElementById('jMesin').value;
-            document.getElementById('pb-warna').innerText = document.getElementById('jWarna').value;
-            document.getElementById('pb-ttdnama').innerText = payload.namaLengkap;
-
-            document.getElementById('pkb-merk').innerText = document.getElementById('jMerk').value;
-            document.getElementById('pkb-nopol').innerText = document.getElementById('jNopol').value;
-            document.getElementById('pkb-rangka').innerText = document.getElementById('jRangka').value;
-            document.getElementById('pkb-mesin').innerText = document.getElementById('jMesin').value;
-            document.getElementById('pkb-ttdnama').innerText = payload.namaLengkap;
-
-            document.getElementById('ps-nama').innerText = payload.namaLengkap;
-            document.getElementById('ps-ktp').innerText = payload.nomorKtp;
-            document.getElementById('ps-shm').innerText = document.getElementById('jShm').value;
-            document.getElementById('ps-luas').innerText = document.getElementById('jLuas').value;
-            document.getElementById('ps-ttdnama').innerText = payload.namaLengkap;
-
-            document.getElementById('pks-shm').innerText = document.getElementById('jShm').value;
-            document.getElementById('pks-barat').innerText = document.getElementById('jBarat').value;
-            document.getElementById('pks-timur').innerText = document.getElementById('jTimur').value;
-            document.getElementById('pks-utara').innerText = document.getElementById('jUtara').value;
-            document.getElementById('pks-selatan').innerText = document.getElementById('jSelatan').value;
-            document.getElementById('pks-ttdnama').innerText = payload.namaLengkap;
-
-            // Menyalin Data ke Halaman Blokir Rekening (Lampiran VIII)
-            document.getElementById('p8-bank').innerText = payload.namaBank;
-            document.getElementById('p8-nama').innerText = payload.namaLengkap;
-            document.getElementById('p8-ktp').innerText = payload.nomorKtp;
-            document.getElementById('p8-pekerjaan').innerText = payload.pekerjaan;
-            document.getElementById('p8-alamat').innerText = payload.alamat;
-            document.getElementById('p8-namarek').innerText = payload.namaLengkap;
-            document.getElementById('p8-atm').innerText = payload.noKartuAtm;
             document.getElementById('p8-norek').innerText = payload.noRekening;
+            document.getElementById('p8-atm').innerText = payload.noKartuAtm;
             document.getElementById('p8-ibu').innerText = payload.ibuKandung;
-            document.getElementById('p8-ttdnama').innerText = payload.namaLengkap;
+            document.getElementById('p8-pekerjaan').innerText = payload.pekerjaan;
 
-            // Pengiriman Data ke Google Sheets
+            // Variabel Kendaraan & Sertifikat tetap diisi terlepas dari pilihan (untuk memastikan semua 14 halaman terisi format cetaknya)
+            document.getElementById('pb-merk').innerText = document.getElementById('jMerk').value || '-';
+            document.getElementById('pb-nopol').innerText = document.getElementById('jNopol').value || '-';
+            document.getElementById('pb-tahun').innerText = document.getElementById('jTahun').value || '-';
+            document.getElementById('pb-rangka').innerText = document.getElementById('jRangka').value || '-';
+            document.getElementById('pb-mesin').innerText = document.getElementById('jMesin').value || '-';
+            document.getElementById('pb-warna').innerText = document.getElementById('jWarna').value || '-';
+
+            document.getElementById('pkb-merk').innerText = document.getElementById('jMerk').value || '-';
+            document.getElementById('pkb-nopol').innerText = document.getElementById('jNopol').value || '-';
+            document.getElementById('pkb-rangka').innerText = document.getElementById('jRangka').value || '-';
+            document.getElementById('pkb-mesin').innerText = document.getElementById('jMesin').value || '-';
+
+            document.getElementById('ps-shm').innerText = document.getElementById('jShm').value || '-';
+            document.getElementById('ps-luas').innerText = document.getElementById('jLuas').value || '-';
+            document.getElementById('pks-shm').innerText = document.getElementById('jShm').value || '-';
+            document.getElementById('pks-barat').innerText = document.getElementById('jBarat').value || '-';
+            document.getElementById('pks-timur').innerText = document.getElementById('jTimur').value || '-';
+            document.getElementById('pks-utara').innerText = document.getElementById('jUtara').value || '-';
+            document.getElementById('pks-selatan').innerText = document.getElementById('jSelatan').value || '-';
+
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -698,16 +689,19 @@
                 success.classList.remove('hidden');
             })
             .catch(err => {
-                console.error("Gagal mengirim data:", err);
+                console.error("Gagal mengirim:", err);
                 spinner.classList.add('hidden');
                 overlay.classList.add('hidden');
-                alert("Gagal mengirim data.");
+                alert("Gagal terhubung.");
             });
         }
 
         function cetakDokumen() {
             document.getElementById('overlay').classList.add('hidden');
+            hideAll();
+            document.getElementById('print-area').classList.remove('hidden');
             window.print();
+            document.getElementById('print-area').classList.add('hidden');
             showDashboard();
         }
     </script>
