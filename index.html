@@ -24,15 +24,17 @@
             body * { visibility: hidden; }
             #print-area, #print-area * { visibility: visible; }
             #print-area { position: absolute; left: 0; top: 0; width: 100%; }
-            .print-page { page-break-after: always; padding: 20px; font-family: 'Times New Roman', Times, serif; font-size: 12pt; line-height: 1.5; color: black; }
-            .print-page h1 { font-size: 14pt; font-weight: bold; text-align: center; margin-bottom: 20px; text-transform: uppercase; }
-            .print-row { display: flex; margin-bottom: 4px; }
-            .print-label { width: 250px; }
+            .print-page { page-break-after: always; padding: 20px 40px; font-family: 'Times New Roman', Times, serif; font-size: 11pt; line-height: 1.5; color: black; }
+            .print-page h1 { font-size: 12pt; font-weight: bold; text-align: center; margin-bottom: 20px; text-transform: uppercase; }
+            .print-row { display: flex; margin-bottom: 6px; }
+            .print-label { width: 220px; }
             .print-colon { width: 20px; }
             .print-value { flex: 1; border-bottom: 1px dotted #000; min-height: 20px; }
             .text-center { text-align: center; }
             .mt-10 { margin-top: 40px; }
+            .mb-4 { margin-bottom: 16px; }
             .flex-space { display: flex; justify-content: space-between; }
+            .hidden-print { display: none !important; }
         }
     </style>
     <script id="tailwind-config">
@@ -49,7 +51,7 @@
                 <span class="material-symbols-outlined text-5xl text-primary mb-2">check_circle</span>
                 <p id="overlay-text" class="font-headline-md font-bold text-on-surface mb-4">Pengajuan Berhasil!</p>
                 <button onclick="cetakDokumen()" class="bg-primary text-white px-6 py-2 rounded-lg font-bold w-full flex items-center justify-center gap-2 mb-2">
-                    <span class="material-symbols-outlined">print</span> Cetak 14 Form
+                    <span class="material-symbols-outlined">print</span> Cetak Dokumen
                 </button>
                 <button onclick="showDashboard()" class="text-primary underline">Kembali ke Beranda</button>
             </div>
@@ -79,12 +81,12 @@
         <main class="p-4">
             <div class="bg-white border rounded-xl p-6 shadow-sm flex flex-col gap-4">
                 <div>
-                    <label class="block text-sm font-bold mb-1">NIK KTP *</label>
-                    <input id="nomorKtp" type="number" class="w-full border rounded-lg p-3" placeholder="Masukkan NIK KTP">
-                </div>
-                <div>
                     <label class="block text-sm font-bold mb-1">Nomor Anggota</label>
                     <input id="nomorAnggota" type="text" class="w-full border rounded-lg p-3" placeholder="Ketik No Anggota untuk isi otomatis...">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-1">NIK KTP *</label>
+                    <input id="nomorKtp" type="number" class="w-full border rounded-lg p-3" placeholder="Masukkan NIK KTP">
                 </div>
                 <div>
                     <label class="block text-sm font-bold mb-1">Nama Lengkap *</label>
@@ -261,54 +263,158 @@
 
     <!-- AREA CETAK DOKUMEN (Tersembunyi di UI, Muncul saat Print) -->
     <div id="print-area" class="hidden">
-        <!-- Halaman 1: Permohonan Pinjaman -->
+        
+        <!-- Halaman 1: Permohonan Pinjaman (Lampiran I) -->
         <div class="print-page">
-            <h1>PERMOHONAN PEMBIAYAAN</h1>
-            <div class="print-row"><div class="print-label">Nama</div><div class="print-colon">:</div><div class="print-value" id="p-nama"></div></div>
-            <div class="print-row"><div class="print-label">Nomor KTP</div><div class="print-colon">:</div><div class="print-value" id="p-ktp"></div></div>
-            <div class="print-row"><div class="print-label">Nomor NPWP</div><div class="print-colon">:</div><div class="print-value" id="p-npwp"></div></div>
-            <div class="print-row"><div class="print-label">Alamat</div><div class="print-colon">:</div><div class="print-value" id="p-alamat"></div></div>
-            <div class="print-row"><div class="print-label">Nomor Anggota</div><div class="print-colon">:</div><div class="print-value" id="p-anggota"></div></div>
-            <div class="print-row"><div class="print-label">Lokasi Kerja</div><div class="print-colon">:</div><div class="print-value" id="p-lokasi"></div></div>
-            <div class="print-row"><div class="print-label">Alamat Email</div><div class="print-colon">:</div><div class="print-value" id="p-email"></div></div>
-            <div class="print-row"><div class="print-label">No HP</div><div class="print-colon">:</div><div class="print-value" id="p-hp"></div></div>
-            <div class="print-row"><div class="print-label">No HP Pasangan</div><div class="print-colon">:</div><div class="print-value" id="p-hppasangan"></div></div>
-            <div class="print-row"><div class="print-label">Nama/No HP Atasan</div><div class="print-colon">:</div><div class="print-value" id="p-atasan"></div></div>
-            <div class="print-row"><div class="print-label">Bank Cabang Pencairan</div><div class="print-colon">:</div><div class="print-value" id="p-bank"></div></div>
-            <div class="print-row mt-10"><div class="print-label"><strong>Pengajuan Pinjaman</strong></div><div class="print-colon">:</div><div class="print-value font-bold">Rp. <span id="p-jumlah"></span></div></div>
-            <div class="print-row"><div class="print-label">Jangka Waktu</div><div class="print-colon">:</div><div class="print-value"><span id="p-tenor"></span> Bulan</div></div>
-            <div class="print-row"><div class="print-label">Keperluan</div><div class="print-colon">:</div><div class="print-value" id="p-keperluan"></div></div>
+            <h1 class="mb-4">Lampiran I<br>PERMOHONAN PEMBIAYAAN</h1>
+            <div class="print-row"><div class="print-label">Nama</div><div class="print-colon">:</div><div class="print-value" id="p1-nama"></div></div>
+            <div class="print-row"><div class="print-label">Nomor KTP</div><div class="print-colon">:</div><div class="print-value" id="p1-ktp"></div></div>
+            <div class="print-row"><div class="print-label">Nomor NPWP</div><div class="print-colon">:</div><div class="print-value" id="p1-npwp"></div></div>
+            <div class="print-row"><div class="print-label">Alamat</div><div class="print-colon">:</div><div class="print-value" id="p1-alamat"></div></div>
+            <div class="print-row"><div class="print-label">Nomor Anggota</div><div class="print-colon">:</div><div class="print-value" id="p1-anggota"></div></div>
+            <div class="print-row"><div class="print-label">Lokasi Kerja</div><div class="print-colon">:</div><div class="print-value" id="p1-lokasi"></div></div>
+            <div class="print-row"><div class="print-label">Alamat Email</div><div class="print-colon">:</div><div class="print-value" id="p1-email"></div></div>
+            <div class="print-row"><div class="print-label">No Telpon/Handphone</div><div class="print-colon">:</div><div class="print-value" id="p1-hp"></div></div>
+            <div class="print-row"><div class="print-label">No Telpon Pasangan</div><div class="print-colon">:</div><div class="print-value" id="p1-hppasangan"></div></div>
+            <div class="print-row"><div class="print-label">No Telpon Atasan</div><div class="print-colon">:</div><div class="print-value" id="p1-atasan"></div></div>
+            <div class="print-row"><div class="print-label">Nama Orang Tua Kandung</div><div class="print-colon">:</div><div class="print-value" id="p1-ortu"></div></div>
+            <div class="print-row"><div class="print-label">No Telpon Orang Tua</div><div class="print-colon">:</div><div class="print-value" id="p1-hportu"></div></div>
+            <div class="print-row"><div class="print-label">Bank Pembuka Rekening</div><div class="print-colon">:</div><div class="print-value" id="p1-bank"></div></div>
+            <div class="print-row"><div class="print-label">Pengajuan Pinjaman</div><div class="print-colon">:</div><div class="print-value font-bold">Rp <span id="p1-jumlah"></span></div></div>
+            <div class="print-row"><div class="print-label">Jangka Waktu Pinjaman</div><div class="print-colon">:</div><div class="print-value"><span id="p1-tenor"></span> Bulan</div></div>
+            <div class="print-row"><div class="print-label">Keperluan Pinjaman</div><div class="print-colon">:</div><div class="print-value" id="p1-keperluan"></div></div>
+            <div class="print-row"><div class="print-label">Jaminan Pinjaman</div><div class="print-colon">:</div><div class="print-value" id="p1-jaminan"></div></div>
             
             <div class="mt-10 flex-space">
-                <div class="text-center">Pemohon<br><br><br><br>( <span id="p-ttdnama"></span> )</div>
-                <div class="text-center">Pasangan<br><br><br><br>( ................................ )</div>
+                <div class="text-center">Tanjung, ........................<br>Pemohon<br><br><br><br>( <span id="p1-ttdnama"></span> )</div>
+                <div class="text-center"><br>Pasangan (Suami/Istri)<br><br><br><br>( ................................ )</div>
+                <div class="text-center"><br>Atasan Langsung<br><br><br><br>( ................................ )</div>
             </div>
         </div>
 
-        <!-- Halaman 2: Pengakuan Hutang -->
+        <!-- Halaman 2: Pengakuan Hutang (Lampiran II) -->
         <div class="print-page">
-            <h1>SURAT PENGAKUAN HUTANG</h1>
-            <p>Yang bertanda tangan dibawah ini:</p>
+            <h1 class="mb-4">Lampiran II<br>SURAT PENGAKUAN HUTANG</h1>
+            <p class="mb-4">Yang bertanda tangan dibawah ini:</p>
             <div class="print-row"><div class="print-label">Nama</div><div class="print-colon">:</div><div class="print-value" id="p2-nama"></div></div>
-            <div class="print-row"><div class="print-label">No Rekening Pencairan</div><div class="print-colon">:</div><div class="print-value" id="p2-norek"></div></div>
-            <p style="margin-top:20px; text-align:justify;">Dengan ini memberikan kuasa kepada KOPERASI KARYAWAN ADARO KARYA MANDIRI dalam hal melakukan pemotongan tersebut pada rekening saya atas pinjaman sebesar Rp <span id="p2-jumlah"></span>.</p>
+            <div class="print-row"><div class="print-label">No KTP</div><div class="print-colon">:</div><div class="print-value" id="p2-ktp"></div></div>
+            <div class="print-row"><div class="print-label">Alamat Rumah</div><div class="print-colon">:</div><div class="print-value" id="p2-alamat"></div></div>
+            <div class="print-row"><div class="print-label">Nomor Anggota</div><div class="print-colon">:</div><div class="print-value" id="p2-anggota"></div></div>
+            
+            <p style="margin-top:20px; text-align:justify;">Dengan ini saya menyatakan sadar tanpa ada paksaan dari pihak manapun dan sesungguhnya bahwa saya telah memperoleh pinjaman pembiayaan dari Koperasi Karyawan Adaro Karya Mandiri dengan data sebagai berikut:</p>
+            
+            <div class="print-row mt-4"><div class="print-label">Jumlah Pinjaman</div><div class="print-colon">:</div><div class="print-value">Rp <span id="p2-jumlah"></span></div></div>
+            <div class="print-row"><div class="print-label">Lama Pinjaman</div><div class="print-colon">:</div><div class="print-value"><span id="p2-tenor"></span> Bulan</div></div>
+            
+            <p style="margin-top:20px; text-align:justify;">Atas pinjaman pembiayaan tersebut diatas, saya bertanggungjawab untuk tidak merubah rekening gaji selama masih terikat hutang dan memberikan kuasa kepada KOPERASI KARYAWAN ADARO KARYA MANDIRI dalam hal melakukan pemotongan tersebut pada rekening saya.</p>
+            
+            <div class="print-row mt-4"><div class="print-label">Bank</div><div class="print-colon">:</div><div class="print-value" id="p2-bank"></div></div>
+            <div class="print-row"><div class="print-label">Nomor Rekening</div><div class="print-colon">:</div><div class="print-value" id="p2-norek"></div></div>
+
             <div class="mt-10 flex-space">
                 <div></div>
                 <div class="text-center">Tanjung, ........................<br><br><br><br>( <span id="p2-ttdnama"></span> )</div>
             </div>
         </div>
-        
-        <!-- Catatan: Halaman 3 sampai 14 bisa ditambahkan struktur HTML-nya di sini dengan format yang sama -->
-        <div class="print-page text-center" style="padding-top: 100px;">
-            <h2>[Template Cetak Tersistem]</h2>
-            <p>Halaman lampiran Jaminan, Kuasa Potong Gaji, dan Blokir Rekening akan dicetak secara otomatis mengikuti data yang diinputkan.</p>
+
+        <!-- Halaman Jaminan BPKB (Akan disembunyikan jika bukan BPKB) -->
+        <div id="print-bpkb" class="print-page hidden-print">
+            <h1 class="mb-4">Lampiran VIB<br>SURAT PENYERAHAN BARANG JAMINAN (BPKB)</h1>
+            <p class="mb-4">Yang bertanda tangan di bawah ini:</p>
+            <div class="print-row"><div class="print-label">Nama</div><div class="print-colon">:</div><div class="print-value" id="pb-nama"></div></div>
+            <div class="print-row"><div class="print-label">No KTP</div><div class="print-colon">:</div><div class="print-value" id="pb-ktp"></div></div>
+            <div class="print-row"><div class="print-label">Alamat</div><div class="print-colon">:</div><div class="print-value" id="pb-alamat"></div></div>
+            
+            <p style="margin-top:20px; text-align:justify;">Sehubungan dengan Surat Perjanjian Hutang Piutang, saya serahkan jaminan berupa BPKB Mobil/Sepeda Motor dengan Spesifikasi sebagai berikut:</p>
+            
+            <div class="print-row mt-4"><div class="print-label">Merk/Tipe</div><div class="print-colon">:</div><div class="print-value" id="pb-merk"></div></div>
+            <div class="print-row"><div class="print-label">Nomor Polisi</div><div class="print-colon">:</div><div class="print-value" id="pb-nopol"></div></div>
+            <div class="print-row"><div class="print-label">Tahun Pembuatan</div><div class="print-colon">:</div><div class="print-value" id="pb-tahun"></div></div>
+            <div class="print-row"><div class="print-label">Nomor Rangka</div><div class="print-colon">:</div><div class="print-value" id="pb-rangka"></div></div>
+            <div class="print-row"><div class="print-label">Nomor Mesin</div><div class="print-colon">:</div><div class="print-value" id="pb-mesin"></div></div>
+            <div class="print-row"><div class="print-label">Warna</div><div class="print-colon">:</div><div class="print-value" id="pb-warna"></div></div>
+
+            <p style="margin-top:20px; text-align:justify;">Sebagai itikad baik dan kesanggupan saya memenuhi kewajiban membayar hutang ke Koperasi Karyawan Adaro Karya Mandiri.</p>
+            
+            <div class="mt-10 flex-space">
+                <div class="text-center">Yang Membuat Pernyataan<br><br><br><br>( <span id="pb-ttdnama"></span> )</div>
+                <div class="text-center">Pihak Penerima<br><br><br><br>( ................................ )</div>
+            </div>
+            
+            <!-- Halaman Kuasa Jual BPKB -->
+            <div style="page-break-before: always;"></div>
+            <h1 class="mb-4 mt-10">Lampiran VIIB<br>SURAT KUASA MENJUAL MOBIL/SEPEDA MOTOR</h1>
+            <p class="mb-4">Mewakili atas nama diri sendiri selanjutnya disebut sebagai <strong>Pemberi Kuasa</strong> memberikan wewenang kepada <strong>Penerima Kuasa</strong> (Koperasi) untuk mengurus penjualan Mobil/Sepeda Motor dengan spesifikasi sebagai berikut:</p>
+            
+            <div class="print-row mt-4"><div class="print-label">Merk/Tipe</div><div class="print-colon">:</div><div class="print-value" id="pkb-merk"></div></div>
+            <div class="print-row"><div class="print-label">Nomor Polisi</div><div class="print-colon">:</div><div class="print-value" id="pkb-nopol"></div></div>
+            <div class="print-row"><div class="print-label">Nomor Rangka</div><div class="print-colon">:</div><div class="print-value" id="pkb-rangka"></div></div>
+            <div class="print-row"><div class="print-label">Nomor Mesin</div><div class="print-colon">:</div><div class="print-value" id="pkb-mesin"></div></div>
+
+            <div class="mt-10 flex-space">
+                <div class="text-center">Pemberi Kuasa<br><br><br><br>( <span id="pkb-ttdnama"></span> )</div>
+                <div class="text-center">Penerima Kuasa<br><br><br><br>( ................................ )</div>
+            </div>
         </div>
+
+        <!-- Halaman Jaminan Sertifikat (Akan disembunyikan jika bukan Sertifikat) -->
+        <div id="print-sertifikat" class="print-page hidden-print">
+            <h1 class="mb-4">Lampiran VIA<br>SURAT PENYERAHAN BARANG JAMINAN (SERTIFIKAT TANAH)</h1>
+            <p class="mb-4">Yang bertanda tangan di bawah ini:</p>
+            <div class="print-row"><div class="print-label">Nama</div><div class="print-colon">:</div><div class="print-value" id="ps-nama"></div></div>
+            <div class="print-row"><div class="print-label">No KTP</div><div class="print-colon">:</div><div class="print-value" id="ps-ktp"></div></div>
+            
+            <p style="margin-top:20px; text-align:justify;">Saya serahkan jaminan berupa sertifikat tanah No <span id="ps-shm" class="font-bold border-b border-black inline-block min-w-[100px]"></span> seluas <span id="ps-luas" class="font-bold border-b border-black inline-block min-w-[50px]"></span> meter persegi sebagai itikad baik dan kesanggupan saya memenuhi kewajiban membayar hutang.</p>
+            
+            <div class="mt-10 flex-space">
+                <div class="text-center">Yang Membuat Pernyataan<br><br><br><br>( <span id="ps-ttdnama"></span> )</div>
+                <div class="text-center">Pihak Penerima<br><br><br><br>( ................................ )</div>
+            </div>
+            
+            <!-- Halaman Kuasa Jual Sertifikat -->
+            <div style="page-break-before: always;"></div>
+            <h1 class="mb-4 mt-10">Lampiran VIIA<br>SURAT KUASA MENJUAL RUMAH ATAU TANAH</h1>
+            <p class="mb-4">Selaku Pemberi Kuasa memberikan wewenang kepada Penerima Kuasa untuk mengurus penjualan sebidang tanah atau rumah yang berdiri di atas Sertifikat Hak Milik (SHM) nomor <span id="pks-shm" class="font-bold border-b border-black inline-block min-w-[100px]"></span>.</p>
+            
+            <div class="print-row mt-4"><div class="print-label">Sebelah Barat</div><div class="print-colon">:</div><div class="print-value" id="pks-barat"></div></div>
+            <div class="print-row"><div class="print-label">Sebelah Timur</div><div class="print-colon">:</div><div class="print-value" id="pks-timur"></div></div>
+            <div class="print-row"><div class="print-label">Sebelah Utara</div><div class="print-colon">:</div><div class="print-value" id="pks-utara"></div></div>
+            <div class="print-row"><div class="print-label">Sebelah Selatan</div><div class="print-colon">:</div><div class="print-value" id="pks-selatan"></div></div>
+
+            <div class="mt-10 flex-space">
+                <div class="text-center">Pemberi Kuasa<br><br><br><br>( <span id="pks-ttdnama"></span> )</div>
+            </div>
+        </div>
+
+        <!-- Halaman Kuasa Blokir Rekening (Lampiran VIII) -->
+        <div class="print-page">
+            <h1 class="mb-4">Lampiran VIII<br>SURAT KUASA PEMBLOKIRAN REKENING</h1>
+            <div class="print-row"><div class="print-label">Kepada Pimpinan Bank</div><div class="print-colon">:</div><div class="print-value" id="p8-bank"></div></div>
+            
+            <p style="margin-top:20px; text-align:justify;">Yang bertanda tangan di bawah ini:</p>
+            <div class="print-row"><div class="print-label">Nama</div><div class="print-colon">:</div><div class="print-value" id="p8-nama"></div></div>
+            <div class="print-row"><div class="print-label">No KTP</div><div class="print-colon">:</div><div class="print-value" id="p8-ktp"></div></div>
+            <div class="print-row"><div class="print-label">Pekerjaan</div><div class="print-colon">:</div><div class="print-value" id="p8-pekerjaan"></div></div>
+            <div class="print-row"><div class="print-label">Alamat</div><div class="print-colon">:</div><div class="print-value" id="p8-alamat"></div></div>
+            
+            <p style="margin-top:20px; text-align:justify;">Dengan ini menegaskan kepada saudara, mohon untuk dilakukan pemblokiran rekening saya atas hutang tagihan dari Koperasi Karyawan Adaro Karya Mandiri dengan data sebagai berikut:</p>
+            
+            <div class="print-row mt-4"><div class="print-label">Nama</div><div class="print-colon">:</div><div class="print-value" id="p8-namarek"></div></div>
+            <div class="print-row"><div class="print-label">Nomor Kartu ATM</div><div class="print-colon">:</div><div class="print-value" id="p8-atm"></div></div>
+            <div class="print-row"><div class="print-label">Nomor Rekening</div><div class="print-colon">:</div><div class="print-value" id="p8-norek"></div></div>
+            <div class="print-row"><div class="print-label">Nama Ibu Kandung</div><div class="print-colon">:</div><div class="print-value" id="p8-ibu"></div></div>
+            <div class="print-row"><div class="print-label">Nominal Pemblokiran</div><div class="print-colon">:</div><div class="print-value">Sesuai Sisa Hutang</div></div>
+
+            <div class="mt-10 flex-space">
+                <div class="text-center">Tanjung, ........................<br>Pemberi Kuasa<br><br><br><br>( <span id="p8-ttdnama"></span> )</div>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxBMZ6lVxo7H3B5aRaMO26OoiCGNzbZWXIaQ6fXypq8T25kl_2g-hgtSzy33tutXGJ5/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzA8emNN_oYAUyJ1HeA3vXgm8XThYwawORhmMTJ02IjmPcLlizHMt3c07zmq5wywTzh/exec";
 
-        // Fitur Cari Data Otomatis khusus Nomor Anggota
         document.getElementById('nomorAnggota').addEventListener('blur', function() { 
             cariData(this.value); 
         });
@@ -316,20 +422,11 @@
         function cariData(nomorAnggota) {
             if(!nomorAnggota) return;
             
-            // Tambahkan encodeURIComponent untuk mencegah error pada URL jika ada spasi
             let url = GOOGLE_SCRIPT_URL + "?noAnggota=" + encodeURIComponent(nomorAnggota);
-            
-            // Ubah placeholder untuk memberi tahu user proses sedang berjalan
             document.getElementById('namaLengkap').placeholder = "Sedang mencari data...";
             
-            fetch(url, {
-                method: 'GET',
-                mode: 'cors'
-            })
-                .then(r => {
-                    if (!r.ok) throw new Error("Respons jaringan tidak sesuai");
-                    return r.json();
-                })
+            fetch(url, { method: 'GET', mode: 'cors' })
+                .then(r => { if (!r.ok) throw new Error("Jaringan error"); return r.json(); })
                 .then(res => {
                     if(res.status === 'success') {
                         const d = res.data;
@@ -342,21 +439,18 @@
                         document.getElementById('namaBank').value = d.namaBank || '';
                         document.getElementById('noRekening').value = d.noRekening || '';
                         
-                        // Ekstraksi Tempat Lahir (Asumsi format text: "Tempat, Tanggal")
                         if (d.ttl) {
                             let parts = d.ttl.split(',');
                             document.getElementById('tempatLahir').value = parts[0] ? parts[0].trim() : d.ttl;
                         }
-
                         document.getElementById('namaLengkap').placeholder = "";
                     } else {
                         document.getElementById('namaLengkap').placeholder = "Data tidak ditemukan, isi manual";
                     }
                 })
                 .catch(err => {
-                    // Penanganan error UI yang lebih ramah pengguna tanpa memutus alur
-                    console.warn("Pencarian data diabaikan (CORS/Jaringan). Silakan isi manual.");
-                    document.getElementById('namaLengkap').placeholder = "Gagal terhubung, silakan isi manual";
+                    console.warn("Pencarian diabaikan.");
+                    document.getElementById('namaLengkap').placeholder = "Gagal terhubung, isi manual";
                 });
         }
 
@@ -418,29 +512,92 @@
                 spekTanah: `SHM: ${document.getElementById('jShm').value} | Luas: ${document.getElementById('jLuas').value} m2 | Utara: ${document.getElementById('jUtara').value} | Selatan: ${document.getElementById('jSelatan').value} | Timur: ${document.getElementById('jTimur').value} | Barat: ${document.getElementById('jBarat').value}`
             };
 
-            // Mengisi Data ke Template Cetak
-            document.getElementById('p-nama').innerText = payload.namaLengkap;
-            document.getElementById('p-ktp').innerText = payload.nomorKtp;
-            document.getElementById('p-npwp').innerText = payload.npwp;
-            document.getElementById('p-alamat').innerText = payload.alamat;
-            document.getElementById('p-anggota').innerText = payload.nomorAnggota;
-            document.getElementById('p-lokasi').innerText = payload.lokasiKerja;
-            document.getElementById('p-email').innerText = payload.email;
-            document.getElementById('p-hp').innerText = payload.nomorTelp;
-            document.getElementById('p-hppasangan').innerText = payload.hpPasangan;
-            document.getElementById('p-atasan').innerText = payload.namaAtasan + " / " + payload.hpAtasan;
-            document.getElementById('p-bank').innerText = payload.namaBank + " - " + payload.noRekening;
-            document.getElementById('p-jumlah').innerText = parseInt(payload.jumlahPinjaman || 0).toLocaleString('id-ID');
-            document.getElementById('p-tenor').innerText = payload.jangkaWaktu;
-            document.getElementById('p-keperluan').innerText = payload.keperluan;
-            document.getElementById('p-ttdnama').innerText = payload.namaLengkap;
+            // Menyalin Data ke Halaman 1 (Permohonan)
+            document.getElementById('p1-nama').innerText = payload.namaLengkap;
+            document.getElementById('p1-ktp').innerText = payload.nomorKtp;
+            document.getElementById('p1-npwp').innerText = payload.npwp;
+            document.getElementById('p1-alamat').innerText = payload.alamat;
+            document.getElementById('p1-anggota').innerText = payload.nomorAnggota;
+            document.getElementById('p1-lokasi').innerText = payload.lokasiKerja;
+            document.getElementById('p1-email').innerText = payload.email;
+            document.getElementById('p1-hp').innerText = payload.nomorTelp;
+            document.getElementById('p1-hppasangan').innerText = payload.hpPasangan;
+            document.getElementById('p1-atasan').innerText = payload.namaAtasan + " / " + payload.hpAtasan;
+            document.getElementById('p1-ortu').innerText = payload.namaOrangTua;
+            document.getElementById('p1-hportu').innerText = payload.hpOrangTua;
+            document.getElementById('p1-bank').innerText = payload.namaBank;
+            document.getElementById('p1-jumlah').innerText = parseInt(payload.jumlahPinjaman || 0).toLocaleString('id-ID');
+            document.getElementById('p1-tenor').innerText = payload.jangkaWaktu;
+            document.getElementById('p1-keperluan').innerText = payload.keperluan;
+            document.getElementById('p1-jaminan').innerText = payload.jenisJaminan;
+            document.getElementById('p1-ttdnama').innerText = payload.namaLengkap;
             
+            // Menyalin Data ke Halaman 2 (Pengakuan Hutang)
             document.getElementById('p2-nama').innerText = payload.namaLengkap;
+            document.getElementById('p2-ktp').innerText = payload.nomorKtp;
+            document.getElementById('p2-alamat').innerText = payload.alamat;
+            document.getElementById('p2-anggota').innerText = payload.nomorAnggota;
+            document.getElementById('p2-bank').innerText = payload.namaBank;
             document.getElementById('p2-norek').innerText = payload.noRekening;
             document.getElementById('p2-jumlah').innerText = parseInt(payload.jumlahPinjaman || 0).toLocaleString('id-ID');
+            document.getElementById('p2-tenor').innerText = payload.jangkaWaktu;
             document.getElementById('p2-ttdnama').innerText = payload.namaLengkap;
 
-            // Pengiriman Data dengan Penanganan Error
+            // Mengatur Penampilan Halaman Jaminan Sesuai Pilihan
+            const halBPKB = document.getElementById('print-bpkb');
+            const halSertifikat = document.getElementById('print-sertifikat');
+            
+            halBPKB.classList.add('hidden-print');
+            halSertifikat.classList.add('hidden-print');
+
+            if (payload.jenisJaminan === 'BPKB') {
+                halBPKB.classList.remove('hidden-print');
+                document.getElementById('pb-nama').innerText = payload.namaLengkap;
+                document.getElementById('pb-ktp').innerText = payload.nomorKtp;
+                document.getElementById('pb-alamat').innerText = payload.alamat;
+                document.getElementById('pb-merk').innerText = document.getElementById('jMerk').value;
+                document.getElementById('pb-nopol').innerText = document.getElementById('jNopol').value;
+                document.getElementById('pb-tahun').innerText = document.getElementById('jTahun').value;
+                document.getElementById('pb-rangka').innerText = document.getElementById('jRangka').value;
+                document.getElementById('pb-mesin').innerText = document.getElementById('jMesin').value;
+                document.getElementById('pb-warna').innerText = document.getElementById('jWarna').value;
+                document.getElementById('pb-ttdnama').innerText = payload.namaLengkap;
+
+                document.getElementById('pkb-merk').innerText = document.getElementById('jMerk').value;
+                document.getElementById('pkb-nopol').innerText = document.getElementById('jNopol').value;
+                document.getElementById('pkb-rangka').innerText = document.getElementById('jRangka').value;
+                document.getElementById('pkb-mesin').innerText = document.getElementById('jMesin').value;
+                document.getElementById('pkb-ttdnama').innerText = payload.namaLengkap;
+
+            } else if (payload.jenisJaminan === 'Sertifikat') {
+                halSertifikat.classList.remove('hidden-print');
+                document.getElementById('ps-nama').innerText = payload.namaLengkap;
+                document.getElementById('ps-ktp').innerText = payload.nomorKtp;
+                document.getElementById('ps-shm').innerText = document.getElementById('jShm').value;
+                document.getElementById('ps-luas').innerText = document.getElementById('jLuas').value;
+                document.getElementById('ps-ttdnama').innerText = payload.namaLengkap;
+
+                document.getElementById('pks-shm').innerText = document.getElementById('jShm').value;
+                document.getElementById('pks-barat').innerText = document.getElementById('jBarat').value;
+                document.getElementById('pks-timur').innerText = document.getElementById('jTimur').value;
+                document.getElementById('pks-utara').innerText = document.getElementById('jUtara').value;
+                document.getElementById('pks-selatan').innerText = document.getElementById('jSelatan').value;
+                document.getElementById('pks-ttdnama').innerText = payload.namaLengkap;
+            }
+
+            // Menyalin Data ke Halaman Blokir Rekening (Lampiran VIII)
+            document.getElementById('p8-bank').innerText = payload.namaBank;
+            document.getElementById('p8-nama').innerText = payload.namaLengkap;
+            document.getElementById('p8-ktp').innerText = payload.nomorKtp;
+            document.getElementById('p8-pekerjaan').innerText = payload.pekerjaan;
+            document.getElementById('p8-alamat').innerText = payload.alamat;
+            document.getElementById('p8-namarek').innerText = payload.namaLengkap;
+            document.getElementById('p8-atm').innerText = payload.noKartuAtm;
+            document.getElementById('p8-norek').innerText = payload.noRekening;
+            document.getElementById('p8-ibu').innerText = payload.ibuKandung;
+            document.getElementById('p8-ttdnama').innerText = payload.namaLengkap;
+
+            // Pengiriman Data ke Google Sheets
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -453,7 +610,7 @@
                 console.error("Gagal mengirim data:", err);
                 spinner.classList.add('hidden');
                 overlay.classList.add('hidden');
-                alert("Gagal mengirim data. Pastikan koneksi internet stabil atau pengaturan Google Apps Script sudah benar.");
+                alert("Gagal mengirim data.");
             });
         }
 
