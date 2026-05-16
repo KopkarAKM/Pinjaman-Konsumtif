@@ -696,6 +696,28 @@
             });
         }
 
+        // Menyisipkan Kop Surat resmi ke setiap halaman cetak secara otomatis
+        window.addEventListener('DOMContentLoaded', () => {
+            const kopSuratHTML = `
+                <div class="flex items-center border-b-4 border-double border-black pb-3 mb-6">
+                    <img src="https://i.ibb.co.com/WvTwLMn5/image-1.png" class="h-20 w-auto object-contain mr-4" alt="Logo Koperasi">
+                    <div class="text-center flex-1">
+                        <h2 class="text-xl font-black uppercase leading-tight" style="font-family: Arial, sans-serif;">Koperasi Karyawan<br>Adaro Karya Mandiri</h2>
+                        <p class="text-[9pt] font-bold mt-1">Badan Hukum Nomor : 2128/BH/IX Tanggal 31 Juli 1995</p>
+                        <p class="text-[8pt] leading-tight mt-1">
+                            Office : Jl. Jend. A. Yani Komp. Swadharma Jalur II Blok Mawar RT IV<br>
+                            Kel. Mabuun Kec. Murung Pudak Kab. Tabalong Prov. Kalimantan Selatan<br>
+                            Kode Pos 71571 &nbsp;Telp/Fax : 0526 – 2023593 &nbsp;email : kopkar.adaro@gmail.com
+                        </p>
+                    </div>
+                    <div class="w-20"></div> <!-- Penyeimbang layout -->
+                </div>
+            `;
+            document.querySelectorAll('.print-page').forEach(page => {
+                page.insertAdjacentHTML('afterbegin', kopSuratHTML);
+            });
+        });
+
         function cetakDokumen() {
             document.getElementById('overlay').classList.add('hidden');
             hideAll();
