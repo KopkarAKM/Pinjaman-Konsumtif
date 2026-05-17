@@ -22,7 +22,8 @@
         /* CSS Khusus untuk Cetak Dokumen Replikator Asli */
         @media print {
             @page {
-                margin: 12mm 15mm;
+                /* Margin dikecilkan agar muat 1 halaman */
+                margin: 10mm 12mm;
                 size: A4 portrait;
             }
             body { 
@@ -40,29 +41,42 @@
             }
             .print-page { 
                 page-break-after: always; 
-                font-size: 11pt; 
-                line-height: 1.35; 
+                /* Font dikecilkan sedikit untuk mengamankan ruang */
+                font-size: 10pt; 
+                line-height: 1.3; 
                 color: black; 
                 position: relative;
             }
             .print-page:last-child { page-break-after: auto; }
-            .print-page h1 { font-size: 11pt; font-weight: bold; text-align: center; margin-bottom: 15px; }
-            .print-row { display: flex; margin-bottom: 3px; align-items: flex-end;}
-            .print-label { width: 250px; flex-shrink: 0; }
+            .print-page h1 { font-size: 11pt; font-weight: bold; text-align: center; margin-bottom: 12px; }
+            .print-row { display: flex; margin-bottom: 2px; page-break-inside: avoid; break-inside: avoid; }
+            .print-label { width: 230px; flex-shrink: 0; }
             .print-colon { width: 15px; flex-shrink: 0; text-align: center; }
-            /* Membuat efek titik-titik persis seperti form asli */
-            .print-value { flex: 1; border-bottom: 1px dotted #000; min-height: 18px; padding-left: 5px; font-weight: bold; }
-            .print-value-blank { flex: 1; border-bottom: 1px dotted #000; min-height: 18px; }
+            .print-value { flex: 1; border-bottom: 1px dotted #000; min-height: 16px; padding-left: 5px; font-weight: bold; }
+            .print-value-blank { flex: 1; border-bottom: 1px dotted #000; min-height: 16px; }
+            
+            /* Penyesuaian margin khusus cetak agar lebih padat */
             .text-center { text-align: center; }
             .text-justify { text-align: justify; }
-            .mt-6 { margin-top: 24px; }
-            .mt-8 { margin-top: 32px; }
-            .mb-2 { margin-bottom: 8px; }
-            .flex-space { display: flex; justify-content: space-between; }
+            .mt-4 { margin-top: 12px !important; }
+            .mt-6 { margin-top: 16px !important; }
+            .mt-8 { margin-top: 20px !important; }
+            .mt-10 { margin-top: 24px !important; }
+            .mb-2 { margin-bottom: 6px !important; }
+            .mb-4 { margin-bottom: 12px !important; }
+            
+            /* Mencegah blok tanda tangan terpisah ke halaman selanjutnya */
+            .flex-space { 
+                display: flex; 
+                justify-content: space-between; 
+                page-break-inside: avoid; 
+                break-inside: avoid; 
+            }
             .hidden-print { display: none !important; }
-            .signature-box { width: 200px; text-align: center; }
-            .signature-space { height: 70px; }
-            .materai-space { height: 70px; font-size: 8pt; color: #666; text-align: left; padding-top: 30px;}
+            .signature-box { width: 200px; text-align: center; page-break-inside: avoid; break-inside: avoid; }
+            /* Tinggi ruang tanda tangan dan materai dikurangi */
+            .signature-space { height: 50px; }
+            .materai-space { height: 50px; font-size: 8pt; color: #666; text-align: left; padding-top: 20px;}
         }
     </style>
     <script id="tailwind-config">
@@ -346,9 +360,9 @@
                     <input id="jShm" type="text" placeholder="Nomor SHM" class="w-full border rounded-lg p-2 text-sm">
                     <input id="jLuas" type="number" placeholder="Luas Tanah (Meter Persegi)" class="w-full border rounded-lg p-2 text-sm">
                     <input id="jUtara" type="text" placeholder="Batas Utara" class="w-full border rounded-lg p-2 text-sm">
-                    <input id="jSelatan" type="text placeholder="Batas Selatan" class="w-full border rounded-lg p-2 text-sm">
-                    <input id="jTimur" type="text placeholder="Batas Timur" class="w-full border rounded-lg p-2 text-sm">
-                    <input id="jBarat" type="text placeholder="Batas Barat" class="w-full border rounded-lg p-2 text-sm">
+                    <input id="jSelatan" type="text" placeholder="Batas Selatan" class="w-full border rounded-lg p-2 text-sm">
+                    <input id="jTimur" type="text" placeholder="Batas Timur" class="w-full border rounded-lg p-2 text-sm">
+                    <input id="jBarat" type="text" placeholder="Batas Barat" class="w-full border rounded-lg p-2 text-sm">
                 </div>
 
                 <button onclick="submitForm()" class="w-full bg-primary text-white font-bold py-4 rounded-lg mt-6">Kirim & Buat Dokumen</button>
@@ -361,7 +375,7 @@
         
         <!-- ================= HALAMAN 1 : LAMPIRAN I ================= -->
         <div id="page-lampiran-1" class="print-page">
-            <h1 class="mb-4">Lampiran I<br><br>PERMOHONAN PEMBIAYAAN</h1>
+            <h1 class="mb-2">Lampiran I<br><br>PERMOHONAN PEMBIAYAAN</h1>
             <div class="text-right mb-2">Nomor : ..............................</div>
             <div class="print-row"><div class="print-label">Nama*</div><div class="print-colon">:</div><div class="print-value" id="p1-nama"></div></div>
             <div class="print-row"><div class="print-label">Nomor KTP*</div><div class="print-colon">:</div><div class="print-value" id="p1-ktp"></div></div>
@@ -383,32 +397,32 @@
             <div class="print-row"><div class="print-label">Jaminan Pinjaman*</div><div class="print-colon">:</div><div class="print-value" id="p1-jaminan"></div></div>
             <div class="print-row"><div class="print-label"></div><div class="print-colon"></div><div class="print-value-blank"></div></div>
             
-            <div class="mt-8 flex-space">
-                <div class="signature-box">Tanjung, ........................ 2024<br>Tanda Tangan<br><br><br><br><br>( <span id="p1-ttdnama"></span> )<br>Pemohon</div>
-                <div class="signature-box"><br><br><br><br><br><br>( ........................................ )<br>Pasangan(suami/istri)</div>
-                <div class="signature-box">Tanjung, ........................ 20....<br>Mengetahui,<br><br><br><br><br>( ........................................ )<br>Atasan Langsung/Dept Head</div>
+            <div class="mt-6 flex-space">
+                <div class="signature-box">Tanjung, ........................ 2024<br>Tanda Tangan<br><br><br><br>( <span id="p1-ttdnama"></span> )<br>Pemohon</div>
+                <div class="signature-box"><br><br><br><br><br>( ........................................ )<br>Pasangan(suami/istri)</div>
+                <div class="signature-box">Tanjung, ........................ 20....<br>Mengetahui,<br><br><br><br>( ........................................ )<br>Atasan Langsung/Dept Head</div>
             </div>
 
-            <div class="mt-6">
+            <div class="mt-4">
                 <div class="print-row"><div class="print-label">Kemampuan mengangsur setiap bulan*</div><div class="print-colon">:</div><div class="print-value-blank"></div></div>
                 <div class="print-row"><div class="print-label">Penghasilan bersih sesudah dipotong hutang lainnya*</div><div class="print-colon">:</div><div class="print-value-blank"></div></div>
             </div>
 
-            <div class="mt-4">
+            <div class="mt-2">
                 Permohonan Pinjaman : <strong>(Disetujui / Ditolak)**</strong><br>
                 Jumlah yang disetujui &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: (Rp ....................................)**
             </div>
 
             <div class="mt-4 flex-space">
-                <div class="signature-box">Diperiksa Oleh :<br><br><br><br><br>( ........................................ )<br>Manager Koperasi</div>
-                <div class="signature-box">Dianalisa Oleh :<br><br><br><br><br>( ........................................ )<br>Bendahara Koperasi</div>
-                <div class="signature-box">Disetujui Oleh :<br><br><br><br><br>( ........................................ )<br>Ketua Koperasi</div>
+                <div class="signature-box">Diperiksa Oleh :<br><br><br><br>( ........................................ )<br>Manager Koperasi</div>
+                <div class="signature-box">Dianalisa Oleh :<br><br><br><br>( ........................................ )<br>Bendahara Koperasi</div>
+                <div class="signature-box">Disetujui Oleh :<br><br><br><br>( ........................................ )<br>Ketua Koperasi</div>
             </div>
 
-            <div class="mt-6 font-bold italic text-[10pt]">
+            <div class="mt-4 font-bold italic text-[9pt]">
                 Melampirkan Fotocopy KTP, Fotocopy Buku Tabungan Gaji, Fotocopy Kartu ATM
             </div>
-            <div class="text-[9pt] mt-2">
+            <div class="text-[8pt] mt-1">
                 * &nbsp;&nbsp;Disi oleh pemohon<br>
                 ** &nbsp;Disi oleh bendahara
             </div>
@@ -417,7 +431,7 @@
         <!-- ================= HALAMAN 2 : LAMPIRAN II ================= -->
         <div id="page-lampiran-2" class="print-page">
             <h1 class="mb-4">Lampiran II<br><br>SURAT PENGAKUAN HUTANG</h1>
-            <p class="mb-4">Yang bertandatangan dibawah ini:</p>
+            <p class="mb-2">Yang bertandatangan dibawah ini:</p>
             <div class="print-row"><div class="print-label">Nama</div><div class="print-colon">:</div><div class="print-value" id="p2-nama"></div></div>
             <div class="print-row"><div class="print-label">No KTP</div><div class="print-colon">:</div><div class="print-value" id="p2-ktp"></div></div>
             <div class="print-row"><div class="print-label">Alamat Rumah</div><div class="print-colon">:</div><div class="print-value" id="p2-alamat"></div></div>
@@ -426,7 +440,7 @@
             <div class="print-row"><div class="print-label">Perusahaan</div><div class="print-colon">:</div><div class="print-value" id="p2-perusahaan"></div></div>
             <div class="print-row"><div class="print-label">Lokasi Kerja</div><div class="print-colon">:</div><div class="print-value" id="p2-lokasi"></div></div>
             
-            <p class="mt-6 text-justify" style="text-indent: 30px;">Dengan ini saya menyatakan sadar tanpa ada paksaan dari pihak manapun dan sesungguhnya bahwa saya telah memperoleh pinjaman pembiayaan perjalanan wisata/perjalanan dinas dari Koperasi Karyawan Adaro Karya Mandiri dengan data sebagai berikut:</p>
+            <p class="mt-4 text-justify" style="text-indent: 30px;">Dengan ini saya menyatakan sadar tanpa ada paksaan dari pihak manapun dan sesungguhnya bahwa saya telah memperoleh pinjaman pembiayaan perjalanan wisata/perjalanan dinas dari Koperasi Karyawan Adaro Karya Mandiri dengan data sebagai berikut:</p>
             
             <div class="print-row mt-4"><div class="print-label">Jumlah Pinjaman</div><div class="print-colon">:</div><div class="print-value">Rp <span id="p2-jumlah"></span></div></div>
             <div class="print-row"><div class="print-label">Lama Pinjaman</div><div class="print-colon">:</div><div class="print-value"><span id="p2-tenor"></span> Bulan</div></div>
@@ -434,13 +448,13 @@
             <div class="print-row"><div class="print-label">Jaminan Pinjaman</div><div class="print-colon">:</div><div class="print-value" id="p2-jaminan"></div></div>
             <div class="print-row"><div class="print-label"></div><div class="print-colon"></div><div class="print-value-blank"></div></div>
             
-            <p class="mt-6 text-justify" style="text-indent: 30px;">Atas pinjaman pembiayaan tersebut diatas, saya bertanggungjawab untuk tidak merubah rekening gaji selama masih terikat hutang, mengembalikan semua pinjaman pembiayaan tersebut termasuk biaya administrasi bank yang ditimbulkan dalam bentuk pemotongan/<i>Autodebit</i> pada rekening penerima penyaluran penghasilan saya dari PT Adaro Indonesia ataupun Perusahaan dalam Grup Adaro sebagai berikut :</p>
+            <p class="mt-4 text-justify" style="text-indent: 30px;">Atas pinjaman pembiayaan tersebut diatas, saya bertanggungjawab untuk tidak merubah rekening gaji selama masih terikat hutang, mengembalikan semua pinjaman pembiayaan tersebut termasuk biaya administrasi bank yang ditimbulkan dalam bentuk pemotongan/<i>Autodebit</i> pada rekening penerima penyaluran penghasilan saya dari PT Adaro Indonesia ataupun Perusahaan dalam Grup Adaro sebagai berikut :</p>
             
-            <div class="print-row mt-4"><div class="print-label">Bank</div><div class="print-colon">:</div><div class="print-value" id="p2-bank"></div></div>
+            <div class="print-row mt-2"><div class="print-label">Bank</div><div class="print-colon">:</div><div class="print-value" id="p2-bank"></div></div>
             <div class="print-row"><div class="print-label">Nomor Rekening</div><div class="print-colon">:</div><div class="print-value" id="p2-norek"></div></div>
             <div class="print-row"><div class="print-label">Cabang Pembuka</div><div class="print-colon">:</div><div class="print-value-blank"></div></div>
 
-            <p class="mt-6 text-justify" style="text-indent: 30px;">Dan selanjutnya saya memberikan kuasa kepada <strong><u>KOPERASI KARYAWAN ADARO KARYA MANDIRI</u></strong> dalam hal melakukan pemotongan tersebut pada rekening saya.</p>
+            <p class="mt-4 text-justify" style="text-indent: 30px;">Dan selanjutnya saya memberikan kuasa kepada <strong><u>KOPERASI KARYAWAN ADARO KARYA MANDIRI</u></strong> dalam hal melakukan pemotongan tersebut pada rekening saya.</p>
             <p class="text-justify" style="text-indent: 30px;">Jika saya melakukan perubahan atas rekening penerimaan gaji saya, maka saya bersedia membuat surat pengakuan ini kembali. Jika dikemudian hari saya lalai atau tidak mengindahkannya maka saya bersedia dituntut sesuai prosedur hukum yang berlaku dan berkedudukan di Pengadilan Negeri Tanjung.</p>
             <p class="text-justify" style="text-indent: 30px;">Demikian surat pengakuan hutang ini saya buat, atas perhatian dan kerjasamanya diucapkan terima kasih.</p>
 
@@ -456,7 +470,7 @@
             <div class="print-page">
                 <h1 class="mb-4 text-left">Lampiran VIA</h1>
                 <h1 class="mb-4">SURAT PENYERAHAN BARANG JAMINAN (SERTIFIKAT TANAH/RUMAH)</h1>
-                <p class="mb-4">Yang bertanda tangan di bawah ini:</p>
+                <p class="mb-2">Yang bertanda tangan di bawah ini:</p>
                 <div class="print-row"><div class="print-label">Nama</div><div class="print-colon">:</div><div class="print-value" id="ps-nama"></div></div>
                 <div class="print-row"><div class="print-label">Jenis Kelamin</div><div class="print-colon">:</div><div class="print-value" id="ps-jk"></div></div>
                 <div class="print-row"><div class="print-label">No KTP</div><div class="print-colon">:</div><div class="print-value" id="ps-ktp"></div></div>
@@ -464,7 +478,7 @@
                 <div class="print-row"><div class="print-label">Alamat</div><div class="print-colon">:</div><div class="print-value" id="ps-alamat"></div></div>
                 <div class="print-row"><div class="print-label"></div><div class="print-colon"></div><div class="print-value-blank"></div></div>
                 
-                <p class="mt-6 text-justify">Pada Hari ini........................Tanggal.............Bulan........................Tahun 20......</p>
+                <p class="mt-4 text-justify">Pada Hari ini........................Tanggal.............Bulan........................Tahun 20......</p>
                 <p class="text-justify">Sehubungan dengan Surat Perjanjian Hutang Piutang dan Surat Pengakuan Hutang antara saya dengan Koperasi Karyawan Adaro Karya Mandiri Nomor................., sesuai dengan peraturan yang diberlakukan Pihak Pemberi Pinjaman, limit pinjaman minimal dan lebih dari Rp 10.000.0000,- (sepuluh juta rupiah) wajib menyertakan jaminan.</p>
                 <p class="text-justify">Saya serahkan jaminan berupa sertifikat tanah No <span id="ps-shm" class="font-bold border-b border-black inline-block min-w-[100px] text-center"></span> seluas <span id="ps-luas" class="font-bold border-b border-black inline-block min-w-[50px] text-center"></span> bertempat di................................................................................................................., sebagai itikat baik dan kesanggupan saya memenuhi kewajiban membayar hutang ke pada Koperasi Karyawan Adaro Karya Mandiri.</p>
                 <p class="text-justify">Apabila dikemudian hari saya gagal bayar/wanprestasi karena alasan dan kondisi apapun. Saya bersedia menyerahkan hak atas kepemilikan barang jaminan tersebut dan memberikan kuasa menjual untuk memenuhi kewajiban saya kepada Pihak Koperasi Karyawan Adaro Karya Mandiri.</p>
@@ -475,7 +489,7 @@
                     <div class="signature-box"><br>Pihak Penerima<br><div class="signature-space"></div><br><br>( ........................................ )<br>Kopkar Adaro Karya Mandiri</div>
                 </div>
 
-                <div class="text-center font-bold mt-4">Saksi-saksi</div>
+                <div class="text-center font-bold mt-2">Saksi-saksi</div>
                 <div class="flex-space mt-2">
                     <div class="signature-box">Saksi 1<br><div class="signature-space"></div><br>( ........................................ )<br>Anggota Keluarga</div>
                     <div class="signature-box">Saksi 2<br><div class="signature-space"></div><br>( ........................................ )<br>Manajer</div>
@@ -485,7 +499,7 @@
             <div class="print-page">
                 <h1 class="mb-4 text-left">Lampiran VIIA</h1>
                 <h1 class="mb-4">SURAT KUASA MENJUAL RUMAH ATAU TANAH</h1>
-                <p class="mb-4">Yang bertanda tangan di bawah ini:</p>
+                <p class="mb-2">Yang bertanda tangan di bawah ini:</p>
                 <div class="print-row"><div class="print-label">Nama</div><div class="print-colon">:</div><div class="print-value" id="pks-nama"></div></div>
                 <div class="print-row"><div class="print-label">No KTP</div><div class="print-colon">:</div><div class="print-value" id="pks-ktp"></div></div>
                 <div class="print-row"><div class="print-label">Tempat & Tanggal Lahir</div><div class="print-colon">:</div><div class="print-value" id="pks-ttl"></div></div>
@@ -493,8 +507,8 @@
                 <div class="print-row"><div class="print-label">Alamat</div><div class="print-colon">:</div><div class="print-value" id="pks-alamat"></div></div>
                 <div class="print-row"><div class="print-label">Nomor Telpon</div><div class="print-colon">:</div><div class="print-value" id="pks-telp"></div></div>
                 
-                <p class="mt-6 mb-2">Mewakili atas nama diri sendiri selanjutnya disebut sebagai <strong>Pemberi Kuasa.</strong></p>
-                <p class="mb-4 font-bold">Dengan ini memberikan kuasa kepada:</p>
+                <p class="mt-4 mb-2">Mewakili atas nama diri sendiri selanjutnya disebut sebagai <strong>Pemberi Kuasa.</strong></p>
+                <p class="mb-2 font-bold">Dengan ini memberikan kuasa kepada:</p>
 
                 <div class="print-row"><div class="print-label">Nama</div><div class="print-colon">:</div><div class="print-value-blank"></div></div>
                 <div class="print-row"><div class="print-label">No KTP</div><div class="print-colon">:</div><div class="print-value-blank"></div></div>
@@ -503,7 +517,7 @@
                 <div class="print-row"><div class="print-label">Alamat</div><div class="print-colon">:</div><div class="print-value-blank"></div></div>
                 <div class="print-row"><div class="print-label">Nomor Telpon</div><div class="print-colon">:</div><div class="print-value-blank"></div></div>
 
-                <p class="mt-6 mb-4">Mewakili Koperasi Karyawan Adaro Karya Mandiri selanjutnya disebut sebagai <strong>Penerima Kuasa.</strong></p>
+                <p class="mt-4 mb-2">Mewakili Koperasi Karyawan Adaro Karya Mandiri selanjutnya disebut sebagai <strong>Penerima Kuasa.</strong></p>
                 
                 <p class="text-justify mb-2">Selaku Pemberi Kuasa menyatakan memberikan wewenang kepada Penerima Kuasa untuk mengurus penjualan sebidang tanah atau rumah yang berdiri di atas Sertifikat Hak Milik (SHM) nomor <span id="pks-shm" class="font-bold border-b border-black inline-block min-w-[100px] text-center"></span> atas nama...................................................... (sesuai dengan surat jaminan No............)</p>
                 <p class="text-justify mb-2">Luas tanah adalah <span id="pks-luas" class="font-bold border-b border-black inline-block min-w-[50px] text-center"></span> meter persegi sedangkan rumah yang berdiri di atasnya seluas...................meter persegi.</p>
@@ -514,20 +528,20 @@
                 <div class="print-row"><div class="print-label" style="width: 180px;">Sebelah Utara adalah</div><div class="print-value" id="pks-utara"></div></div>
                 <div class="print-row"><div class="print-label" style="width: 180px;">Sebelah Selatan adalah</div><div class="print-value" id="pks-selatan"></div></div>
                 
-                <p class="mt-6 text-justify">Demikian surat kuasa ini dibuat dengan sebenar-benarnya tanpa ada paksaan dari pihak manapun untuk dapat dipergunakan sebagaimana mestinya.</p>
+                <p class="mt-4 text-justify">Demikian surat kuasa ini dibuat dengan sebenar-benarnya tanpa ada paksaan dari pihak manapun untuk dapat dipergunakan sebagaimana mestinya.</p>
 
-                <div class="mt-6 flex-space">
+                <div class="mt-4 flex-space">
                     <div class="signature-box">Tanjung, ....................................<br>Pemberi Kuasa<br><div class="materai-space">Materai 10000</div><br>( <span id="pks-ttdnama"></span> )<br>No Anggota</div>
                     <div class="signature-box"><br>Penerima Kuasa<br><div class="signature-space"></div><br><br>( ........................................ )<br>Kopkar Adaro Karya Mandiri</div>
                 </div>
 
-                <div class="text-center font-bold mt-4">Saksi-saksi</div>
+                <div class="text-center font-bold mt-2">Saksi-saksi</div>
                 <div class="flex-space mt-2">
                     <div class="signature-box">Saksi 1<br><div class="signature-space"></div><br>( ........................................ )<br>Anggota Keluarga</div>
                     <div class="signature-box">Saksi 2<br><div class="signature-space"></div><br>( ........................................ )<br>Manajer</div>
                 </div>
 
-                <div class="mt-6">
+                <div class="mt-4">
                     Mengetahui:<br>
                     Lurah Desa.................................Kecamatan......................................
                     <br><br><br><br>
@@ -542,7 +556,7 @@
             <div class="print-page">
                 <h1 class="mb-4 text-left">Lampiran VIB</h1>
                 <h1 class="mb-4">SURAT PENYERAHAN BARANG JAMINAN (BPKB)</h1>
-                <p class="mb-4">Yang bertanda tangan di bawah ini:</p>
+                <p class="mb-2">Yang bertanda tangan di bawah ini:</p>
                 <div class="print-row"><div class="print-label">Nama</div><div class="print-colon">:</div><div class="print-value" id="pb-nama"></div></div>
                 <div class="print-row"><div class="print-label">Jenis Kelamin</div><div class="print-colon">:</div><div class="print-value" id="pb-jk"></div></div>
                 <div class="print-row"><div class="print-label">No KTP</div><div class="print-colon">:</div><div class="print-value" id="pb-ktp"></div></div>
@@ -550,9 +564,9 @@
                 <div class="print-row"><div class="print-label">Alamat</div><div class="print-colon">:</div><div class="print-value" id="pb-alamat"></div></div>
                 <div class="print-row"><div class="print-label"></div><div class="print-colon"></div><div class="print-value-blank"></div></div>
                 
-                <p class="mt-6 text-justify">Pada Hari ini........................Tanggal.............Bulan........................Tahun 20......</p>
+                <p class="mt-4 text-justify">Pada Hari ini........................Tanggal.............Bulan........................Tahun 20......</p>
                 <p class="text-justify">Sehubungan dengan Surat Perjanjian Hutang Piutang dan Surat Pengakuan Hutang antara saya dengan Koperasi Karyawan Adaro Karya Mandiri Nomor................., sesuai dengan peraturan yang diberlakukan Pihak Pemberi Pinjaman, limit pinjaman minimal dan lebih dari Rp 10.000.0000,- (sepuluh juta rupiah) wajib menyertakan jaminan.</p>
-                <p class="text-justify mb-4">Saya serahkan jaminan berupa BPKB Mobil/Sepeda Motor dengan Spesifikasi sebagai berikut:</p>
+                <p class="text-justify mb-2">Saya serahkan jaminan berupa BPKB Mobil/Sepeda Motor dengan Spesifikasi sebagai berikut:</p>
                 
                 <div class="print-row"><div class="print-label">Nama</div><div class="print-colon">:</div><div class="print-value-blank"></div></div>
                 <div class="print-row"><div class="print-label">Nomor Polisi</div><div class="print-colon">:</div><div class="print-value" id="pb-nopol"></div></div>
@@ -564,16 +578,16 @@
                 <div class="print-row"><div class="print-label">Nomor Mesin</div><div class="print-colon">:</div><div class="print-value" id="pb-mesin"></div></div>
                 <div class="print-row"><div class="print-label">Warna</div><div class="print-colon">:</div><div class="print-value" id="pb-warna"></div></div>
                 
-                <p class="mt-6 text-justify">Sebagai itikat baik dan kesanggupan saya memenuhi kewajiban membayar hutang ke pada Koperasi Karyawan Adaro Karya Mandiri.</p>
+                <p class="mt-4 text-justify">Sebagai itikat baik dan kesanggupan saya memenuhi kewajiban membayar hutang ke pada Koperasi Karyawan Adaro Karya Mandiri.</p>
                 <p class="text-justify">Apabila dikemudian hari saya gagal bayar/wanprestasi karena alasan dan kondisi apapun. Saya bersedia menyerahkan hak atas kepemilikan barang jaminan tersebut dan memberikan kuasa menjual untuk memenuhi kewajiban saya kepada Pihak Koperasi Karyawan Adaro Karya Mandiri.</p>
                 <p class="text-justify">Demikian Surat Penyerahan Barang Jaminan ini saya buat dengan sebenar-benarnya tanpa ada tekanan, paksaan dari pihak manapun.</p>
 
-                <div class="mt-6 flex-space">
+                <div class="mt-4 flex-space">
                     <div class="signature-box">Tanjung, ....................................<br>Yang Membuat Pernyataan<br><div class="materai-space">Materai 10000</div><br>( <span id="pb-ttdnama"></span> )<br>No Anggota</div>
                     <div class="signature-box"><br>Pihak Penerima<br><div class="signature-space"></div><br><br>( ........................................ )<br>Kopkar Adaro Karya Mandiri</div>
                 </div>
 
-                <div class="text-center font-bold mt-4">Saksi-saksi</div>
+                <div class="text-center font-bold mt-2">Saksi-saksi</div>
                 <div class="flex-space mt-2">
                     <div class="signature-box">Saksi 1<br><div class="signature-space"></div><br>( ........................................ )<br>Anggota Keluarga</div>
                     <div class="signature-box">Saksi 2<br><div class="signature-space"></div><br>( ........................................ )<br>Manajer</div>
@@ -583,7 +597,7 @@
             <div class="print-page">
                 <h1 class="mb-4 text-left">Lampiran VIIB</h1>
                 <h1 class="mb-4">SURAT KUASA MENJUAL MOBIL/SEPEDA MOTOR</h1>
-                <p class="mb-4">Yang bertanda tangan di bawah ini:</p>
+                <p class="mb-2">Yang bertanda tangan di bawah ini:</p>
                 <div class="print-row"><div class="print-label">Nama</div><div class="print-colon">:</div><div class="print-value" id="pkb-nama"></div></div>
                 <div class="print-row"><div class="print-label">No KTP</div><div class="print-colon">:</div><div class="print-value" id="pkb-ktp"></div></div>
                 <div class="print-row"><div class="print-label">Tempat & Tanggal Lahir</div><div class="print-colon">:</div><div class="print-value" id="pkb-ttl"></div></div>
@@ -591,8 +605,8 @@
                 <div class="print-row"><div class="print-label">Alamat</div><div class="print-colon">:</div><div class="print-value" id="pkb-alamat"></div></div>
                 <div class="print-row"><div class="print-label">Nomor Telpon</div><div class="print-colon">:</div><div class="print-value" id="pkb-telp"></div></div>
                 
-                <p class="mt-6 mb-2">Mewakili atas nama diri sendiri selanjutnya disebut sebagai <strong>Pemberi Kuasa.</strong></p>
-                <p class="mb-4 font-bold">Dengan ini memberikan kuasa kepada:</p>
+                <p class="mt-4 mb-2">Mewakili atas nama diri sendiri selanjutnya disebut sebagai <strong>Pemberi Kuasa.</strong></p>
+                <p class="mb-2 font-bold">Dengan ini memberikan kuasa kepada:</p>
 
                 <div class="print-row"><div class="print-label">Nama</div><div class="print-colon">:</div><div class="print-value-blank"></div></div>
                 <div class="print-row"><div class="print-label">No KTP</div><div class="print-colon">:</div><div class="print-value-blank"></div></div>
@@ -601,9 +615,9 @@
                 <div class="print-row"><div class="print-label">Alamat</div><div class="print-colon">:</div><div class="print-value-blank"></div></div>
                 <div class="print-row"><div class="print-label">Nomor Telpon</div><div class="print-colon">:</div><div class="print-value-blank"></div></div>
 
-                <p class="mt-6 mb-4">Mewakili Koperasi Karyawan Adaro Karya Mandiri selanjutnya disebut sebagai <strong>Penerima Kuasa.</strong></p>
+                <p class="mt-4 mb-2">Mewakili Koperasi Karyawan Adaro Karya Mandiri selanjutnya disebut sebagai <strong>Penerima Kuasa.</strong></p>
                 
-                <p class="text-justify mb-4">Selaku Pemberi Kuasa menyatakan memberikan wewenang kepada Penerima Kuasa untuk mengurus penjualan Mobil/Sepeda Motor dengan spesifikasi sebagai berikut:</p>
+                <p class="text-justify mb-2">Selaku Pemberi Kuasa menyatakan memberikan wewenang kepada Penerima Kuasa untuk mengurus penjualan Mobil/Sepeda Motor dengan spesifikasi sebagai berikut:</p>
                 
                 <div class="print-row"><div class="print-label">Nama</div><div class="print-colon">:</div><div class="print-value-blank"></div></div>
                 <div class="print-row"><div class="print-label">Nomor Polisi</div><div class="print-colon">:</div><div class="print-value" id="pkb2-nopol"></div></div>
@@ -615,23 +629,23 @@
                 <div class="print-row"><div class="print-label">Nomor Mesin</div><div class="print-colon">:</div><div class="print-value" id="pkb2-mesin"></div></div>
                 <div class="print-row"><div class="print-label">Warna</div><div class="print-colon">:</div><div class="print-value" id="pkb2-warna"></div></div>
                 
-                <p class="mt-6 text-justify">Demikian surat kuasa ini dibuat dengan sebenar-benarnya tanpa ada paksaan dari pihak manapun untuk dapat dipergunakan sebagaimana mestinya.</p>
+                <p class="mt-4 text-justify">Demikian surat kuasa ini dibuat dengan sebenar-benarnya tanpa ada paksaan dari pihak manapun untuk dapat dipergunakan sebagaimana mestinya.</p>
 
-                <div class="mt-6 flex-space">
+                <div class="mt-4 flex-space">
                     <div class="signature-box">Tanjung, ....................................<br>Pemberi Kuasa<br><div class="materai-space">Materai 10000</div><br>( <span id="pkb-ttdnama"></span> )<br>No Anggota</div>
                     <div class="signature-box"><br>Penerima Kuasa<br><div class="signature-space"></div><br><br>( ........................................ )<br>Kopkar Adaro Karya Mandiri</div>
                 </div>
 
-                <div class="text-center font-bold mt-4">Saksi-saksi</div>
+                <div class="text-center font-bold mt-2">Saksi-saksi</div>
                 <div class="flex-space mt-2">
                     <div class="signature-box">Saksi 1<br><div class="signature-space"></div><br>( ........................................ )<br>Anggota Keluarga</div>
                     <div class="signature-box">Saksi 2<br><div class="signature-space"></div><br>( ........................................ )<br>Manajer</div>
                 </div>
 
-                <div class="mt-6">
+                <div class="mt-4">
                     Mengetahui:<br>
                     Lurah Desa.................................Kecamatan......................................
-                    <br><br><br><br>
+                    <br><br><br>
                     <span class="text-gray-400">Ttd & stempel kelurahan</span><br>
                     .......................................................
                 </div>
@@ -646,7 +660,7 @@
             <div class="print-row"><div class="print-label" style="width: 150px; padding-left: 60px;">Bank</div><div class="print-colon">:</div><div class="print-value" id="p8-bank"></div></div>
             <div class="print-row"><div class="print-label" style="width: 150px; padding-left: 60px;">Cabang</div><div class="print-colon">:</div><div class="print-value-blank"></div></div>
             
-            <p style="margin-top:40px; text-align:justify;">Yang bertanda tangan di bawah ini:</p>
+            <p style="margin-top:24px; text-align:justify;">Yang bertanda tangan di bawah ini:</p>
             <div class="print-row"><div class="print-label">Nama</div><div class="print-colon">:</div><div class="print-value" id="p8-nama"></div></div>
             <div class="print-row"><div class="print-label">No KTP</div><div class="print-colon">:</div><div class="print-value" id="p8-ktp"></div></div>
             <div class="print-row"><div class="print-label">Tempat & Tanggal Lahir</div><div class="print-colon">:</div><div class="print-value" id="p8-ttl"></div></div>
@@ -666,11 +680,11 @@
 
             <p style="margin-top:20px; text-align:justify;">Atas permohonan saya tersebut, saya membebaskan pihak bank dan karyawannya dari segala akibat tuntutan hukum yang timbul dikemudian hari.</p>
 
-            <div class="mt-10 flex-space">
+            <div class="mt-8 flex-space">
                 <div class="signature-box" style="text-align: left;">Tanjung, ....................................<br>Pemberi Kuasa<br><div class="materai-space">Materai 10000</div><br>( <span id="p8-ttdnama"></span> )<br>No Anggota</div>
             </div>
 
-            <div class="mt-10">
+            <div class="mt-6">
                 Lampiran :<br>
                 1. &nbsp;&nbsp;Fotocopy KTP<br>
                 2. &nbsp;&nbsp;Fotocopy Buku Tabungan Gaji<br>
@@ -928,7 +942,6 @@
             const halBPKB = document.getElementById('print-bpkb');
             const halSertifikat = document.getElementById('print-sertifikat');
             
-            // Sembunyikan halaman opsional terlebih dahulu
             halBPKB.classList.add('hidden-print');
             halSertifikat.classList.add('hidden-print');
 
@@ -984,18 +997,18 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             const kopSuratHTML = `
-                <div class="flex items-center border-b-4 border-double border-black pb-2 mb-4">
-                    <img src="https://i.ibb.co.com/WvTwLMn5/image-1.png" class="h-[75px] w-auto object-contain mr-4" alt="Logo Koperasi">
+                <div class="flex items-center border-b-4 border-double border-black pb-1 mb-2">
+                    <img src="https://i.ibb.co.com/WvTwLMn5/image-1.png" class="h-[65px] w-auto object-contain mr-4" alt="Logo Koperasi">
                     <div class="text-center flex-1">
-                        <h2 class="text-xl font-black uppercase leading-tight" style="font-family: Arial, sans-serif;">Koperasi Karyawan<br>Adaro Karya Mandiri</h2>
-                        <p class="text-[8pt] font-bold mt-1">Badan Hukum Nomor : 2128/BH/IX Tanggal 31 Juli 1995</p>
-                        <p class="text-[7.5pt] leading-tight mt-1 font-bold">
+                        <h2 class="text-lg font-black uppercase leading-tight" style="font-family: Arial, sans-serif;">Koperasi Karyawan<br>Adaro Karya Mandiri</h2>
+                        <p class="text-[7.5pt] font-bold mt-1">Badan Hukum Nomor : 2128/BH/IX Tanggal 31 Juli 1995</p>
+                        <p class="text-[7pt] leading-tight mt-1 font-bold">
                             Office : Jl. Jend. A. Yani Komp. Swadharma Jalur II Blok Mawar RT IV<br>
                             Kel. Mabuun Kec. Murung Pudak Kab. Tabalong Prov. Kalimantan Selatan<br>
-                            Kode Pos 71571 &nbsp;Telp/Fax : 0526 – 2023593 &nbsp;email : kopkar.adaro@gmail.com
+                            Kode Pos 71571  Telp/Fax : 0526 – 2023593  email : kopkar.adaro@gmail.com
                         </p>
                     </div>
-                    <div class="w-[75px]"></div>
+                    <div class="w-[65px]"></div>
                 </div>
             `;
             document.querySelectorAll('.print-page').forEach(page => {
