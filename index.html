@@ -19,11 +19,10 @@
         ::-webkit-scrollbar { width: 0px; background: transparent; }
         .hidden { display: none !important; }
         
-        /* CSS Khusus untuk Cetak Dokumen Replikator Asli */
+        /* CSS Khusus untuk Cetak Dokumen Replikator Asli yang Diperpadat */
         @media print {
             @page {
-                /* Margin dikecilkan agar muat 1 halaman */
-                margin: 10mm 12mm;
+                margin: 8mm 12mm; /* Margin atas-bawah diperkecil sedikit */
                 size: A4 portrait;
             }
             body { 
@@ -41,31 +40,30 @@
             }
             .print-page { 
                 page-break-after: always; 
-                /* Font dikecilkan sedikit untuk mengamankan ruang */
-                font-size: 10pt; 
-                line-height: 1.3; 
+                font-size: 9.5pt; /* Font sedikit diperkecil agar muat 1 lembar */
+                line-height: 1.25; /* Spasi baris dirapatkan */
                 color: black; 
                 position: relative;
             }
             .print-page:last-child { page-break-after: auto; }
-            .print-page h1 { font-size: 11pt; font-weight: bold; text-align: center; margin-bottom: 12px; }
+            .print-page h1 { font-size: 10.5pt; font-weight: bold; text-align: center; margin-bottom: 8px; }
             .print-row { display: flex; margin-bottom: 2px; page-break-inside: avoid; break-inside: avoid; }
             .print-label { width: 230px; flex-shrink: 0; }
             .print-colon { width: 15px; flex-shrink: 0; text-align: center; }
-            .print-value { flex: 1; border-bottom: 1px dotted #000; min-height: 16px; padding-left: 5px; font-weight: bold; }
-            .print-value-blank { flex: 1; border-bottom: 1px dotted #000; min-height: 16px; }
+            .print-value { flex: 1; border-bottom: 1px dotted #000; min-height: 15px; padding-left: 5px; font-weight: bold; }
+            .print-value-blank { flex: 1; border-bottom: 1px dotted #000; min-height: 15px; }
             
-            /* Penyesuaian margin khusus cetak agar lebih padat */
+            /* Penyesuaian margin agar halaman tidak tumpah */
             .text-center { text-align: center; }
             .text-justify { text-align: justify; }
-            .mt-4 { margin-top: 12px !important; }
-            .mt-6 { margin-top: 16px !important; }
-            .mt-8 { margin-top: 20px !important; }
-            .mt-10 { margin-top: 24px !important; }
-            .mb-2 { margin-bottom: 6px !important; }
-            .mb-4 { margin-bottom: 12px !important; }
+            p { margin-bottom: 2px; }
+            .mt-2 { margin-top: 4px !important; }
+            .mt-4 { margin-top: 8px !important; }
+            .mt-6 { margin-top: 12px !important; }
+            .mt-8 { margin-top: 16px !important; }
+            .mb-2 { margin-bottom: 4px !important; }
+            .mb-4 { margin-bottom: 8px !important; }
             
-            /* Mencegah blok tanda tangan terpisah ke halaman selanjutnya */
             .flex-space { 
                 display: flex; 
                 justify-content: space-between; 
@@ -74,9 +72,9 @@
             }
             .hidden-print { display: none !important; }
             .signature-box { width: 200px; text-align: center; page-break-inside: avoid; break-inside: avoid; }
-            /* Tinggi ruang tanda tangan dan materai dikurangi */
-            .signature-space { height: 50px; }
-            .materai-space { height: 50px; font-size: 8pt; color: #666; text-align: left; padding-top: 20px;}
+            /* Ruang tanda tangan dan materai dipadatkan */
+            .signature-space { height: 40px; }
+            .materai-space { height: 40px; font-size: 8pt; color: #666; text-align: left; padding-top: 15px;}
         }
     </style>
     <script id="tailwind-config">
@@ -360,9 +358,9 @@
                     <input id="jShm" type="text" placeholder="Nomor SHM" class="w-full border rounded-lg p-2 text-sm">
                     <input id="jLuas" type="number" placeholder="Luas Tanah (Meter Persegi)" class="w-full border rounded-lg p-2 text-sm">
                     <input id="jUtara" type="text" placeholder="Batas Utara" class="w-full border rounded-lg p-2 text-sm">
-                    <input id="jSelatan" type="text" placeholder="Batas Selatan" class="w-full border rounded-lg p-2 text-sm">
-                    <input id="jTimur" type="text" placeholder="Batas Timur" class="w-full border rounded-lg p-2 text-sm">
-                    <input id="jBarat" type="text" placeholder="Batas Barat" class="w-full border rounded-lg p-2 text-sm">
+                    <input id="jSelatan" type="text placeholder="Batas Selatan" class="w-full border rounded-lg p-2 text-sm">
+                    <input id="jTimur" type="text placeholder="Batas Timur" class="w-full border rounded-lg p-2 text-sm">
+                    <input id="jBarat" type="text placeholder="Batas Barat" class="w-full border rounded-lg p-2 text-sm">
                 </div>
 
                 <button onclick="submitForm()" class="w-full bg-primary text-white font-bold py-4 rounded-lg mt-6">Kirim & Buat Dokumen</button>
@@ -397,13 +395,13 @@
             <div class="print-row"><div class="print-label">Jaminan Pinjaman*</div><div class="print-colon">:</div><div class="print-value" id="p1-jaminan"></div></div>
             <div class="print-row"><div class="print-label"></div><div class="print-colon"></div><div class="print-value-blank"></div></div>
             
-            <div class="mt-6 flex-space">
+            <div class="mt-4 flex-space">
                 <div class="signature-box">Tanjung, ........................ 2024<br>Tanda Tangan<br><br><br><br>( <span id="p1-ttdnama"></span> )<br>Pemohon</div>
                 <div class="signature-box"><br><br><br><br><br>( ........................................ )<br>Pasangan(suami/istri)</div>
                 <div class="signature-box">Tanjung, ........................ 20....<br>Mengetahui,<br><br><br><br>( ........................................ )<br>Atasan Langsung/Dept Head</div>
             </div>
 
-            <div class="mt-4">
+            <div class="mt-2">
                 <div class="print-row"><div class="print-label">Kemampuan mengangsur setiap bulan*</div><div class="print-colon">:</div><div class="print-value-blank"></div></div>
                 <div class="print-row"><div class="print-label">Penghasilan bersih sesudah dipotong hutang lainnya*</div><div class="print-colon">:</div><div class="print-value-blank"></div></div>
             </div>
@@ -440,7 +438,7 @@
             <div class="print-row"><div class="print-label">Perusahaan</div><div class="print-colon">:</div><div class="print-value" id="p2-perusahaan"></div></div>
             <div class="print-row"><div class="print-label">Lokasi Kerja</div><div class="print-colon">:</div><div class="print-value" id="p2-lokasi"></div></div>
             
-            <p class="mt-4 text-justify" style="text-indent: 30px;">Dengan ini saya menyatakan sadar tanpa ada paksaan dari pihak manapun dan sesungguhnya bahwa saya telah memperoleh pinjaman dari Koperasi Karyawan Adaro Karya Mandiri dengan data sebagai berikut:</p>
+            <p class="mt-4 text-justify" style="text-indent: 30px;">Dengan ini saya menyatakan sadar tanpa ada paksaan dari pihak manapun dan sesungguhnya bahwa saya telah memperoleh pinjaman pembiayaan perjalanan wisata/perjalanan dinas dari Koperasi Karyawan Adaro Karya Mandiri dengan data sebagai berikut:</p>
             
             <div class="print-row mt-4"><div class="print-label">Jumlah Pinjaman</div><div class="print-colon">:</div><div class="print-value">Rp <span id="p2-jumlah"></span></div></div>
             <div class="print-row"><div class="print-label">Lama Pinjaman</div><div class="print-colon">:</div><div class="print-value"><span id="p2-tenor"></span> Bulan</div></div>
@@ -507,7 +505,7 @@
                 <div class="print-row"><div class="print-label">Alamat</div><div class="print-colon">:</div><div class="print-value" id="pks-alamat"></div></div>
                 <div class="print-row"><div class="print-label">Nomor Telpon</div><div class="print-colon">:</div><div class="print-value" id="pks-telp"></div></div>
                 
-                <p class="mt-4 mb-2">Mewakili atas nama diri sendiri selanjutnya disebut sebagai <strong>Pemberi Kuasa.</strong></p>
+                <p class="mt-2 mb-2">Mewakili atas nama diri sendiri selanjutnya disebut sebagai <strong>Pemberi Kuasa.</strong></p>
                 <p class="mb-2 font-bold">Dengan ini memberikan kuasa kepada:</p>
 
                 <div class="print-row"><div class="print-label">Nama</div><div class="print-colon">:</div><div class="print-value-blank"></div></div>
@@ -541,11 +539,11 @@
                     <div class="signature-box">Saksi 2<br><div class="signature-space"></div><br>( ........................................ )<br>Manajer</div>
                 </div>
 
-                <div class="mt-4">
+                <div class="mt-2">
                     Mengetahui:<br>
                     Lurah Desa.................................Kecamatan......................................
-                    <br><br><br><br>
-                    <span class="text-gray-400">Ttd & stempel kelurahan</span><br>
+                    <br><br><br>
+                    <span class="text-gray-400 text-[8pt]">Ttd & stempel kelurahan</span><br>
                     .......................................................
                 </div>
             </div>
@@ -605,7 +603,7 @@
                 <div class="print-row"><div class="print-label">Alamat</div><div class="print-colon">:</div><div class="print-value" id="pkb-alamat"></div></div>
                 <div class="print-row"><div class="print-label">Nomor Telpon</div><div class="print-colon">:</div><div class="print-value" id="pkb-telp"></div></div>
                 
-                <p class="mt-4 mb-2">Mewakili atas nama diri sendiri selanjutnya disebut sebagai <strong>Pemberi Kuasa.</strong></p>
+                <p class="mt-2 mb-2">Mewakili atas nama diri sendiri selanjutnya disebut sebagai <strong>Pemberi Kuasa.</strong></p>
                 <p class="mb-2 font-bold">Dengan ini memberikan kuasa kepada:</p>
 
                 <div class="print-row"><div class="print-label">Nama</div><div class="print-colon">:</div><div class="print-value-blank"></div></div>
@@ -642,17 +640,17 @@
                     <div class="signature-box">Saksi 2<br><div class="signature-space"></div><br>( ........................................ )<br>Manajer</div>
                 </div>
 
-                <div class="mt-4">
+                <div class="mt-2">
                     Mengetahui:<br>
                     Lurah Desa.................................Kecamatan......................................
                     <br><br><br>
-                    <span class="text-gray-400">Ttd & stempel kelurahan</span><br>
+                    <span class="text-gray-400 text-[8pt]">Ttd & stempel kelurahan</span><br>
                     .......................................................
                 </div>
             </div>
         </div>
 
-        <!-- ================= HALAMAN 8 : LAMPIRAN VIII ================= -->
+        <!-- ================= HAL halaman 8 : LAMPIRAN VIII ================= -->
         <div id="page-lampiran-8" class="print-page">
             <h1 class="mb-4 text-left">Lampiran VIII</h1>
             <h1 class="mb-4">SURAT KUASA PEMBLOKIRAN REKENING</h1>
@@ -997,18 +995,18 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             const kopSuratHTML = `
-                <div class="flex items-center border-b-4 border-double border-black pb-1 mb-2">
-                    <img src="https://i.ibb.co.com/WvTwLMn5/image-1.png" class="h-[65px] w-auto object-contain mr-4" alt="Logo Koperasi">
+                <div class="flex items-center border-b-[3px] border-double border-black pb-1 mb-2">
+                    <img src="https://i.ibb.co.com/WvTwLMn5/image-1.png" class="h-[55px] w-auto object-contain mr-3" alt="Logo Koperasi">
                     <div class="text-center flex-1">
-                        <h2 class="text-lg font-black uppercase leading-tight" style="font-family: Arial, sans-serif;">Koperasi Karyawan<br>Adaro Karya Mandiri</h2>
-                        <p class="text-[7.5pt] font-bold mt-1">Badan Hukum Nomor : 2128/BH/IX Tanggal 31 Juli 1995</p>
-                        <p class="text-[7pt] leading-tight mt-1 font-bold">
+                        <h2 class="text-[12pt] font-black uppercase leading-tight" style="font-family: Arial, sans-serif;">Koperasi Karyawan<br>Adaro Karya Mandiri</h2>
+                        <p class="text-[7pt] font-bold mt-0.5">Badan Hukum Nomor : 2128/BH/IX Tanggal 31 Juli 1995</p>
+                        <p class="text-[6.5pt] leading-tight mt-0.5 font-bold">
                             Office : Jl. Jend. A. Yani Komp. Swadharma Jalur II Blok Mawar RT IV<br>
                             Kel. Mabuun Kec. Murung Pudak Kab. Tabalong Prov. Kalimantan Selatan<br>
                             Kode Pos 71571  Telp/Fax : 0526 – 2023593  email : kopkar.adaro@gmail.com
                         </p>
                     </div>
-                    <div class="w-[65px]"></div>
+                    <div class="w-[55px]"></div>
                 </div>
             `;
             document.querySelectorAll('.print-page').forEach(page => {
